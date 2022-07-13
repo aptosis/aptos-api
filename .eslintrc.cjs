@@ -12,6 +12,6 @@ module.exports = {
   },
   extends: ["@saberhq/eslint-config"],
   parserOptions: {
-    project: ["tsconfig.json", "./**/tsconfig*.json"],
+    project: ["tsconfig.json", "./packages/*/tsconfig*.json"],
   },
 };

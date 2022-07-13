@@ -8,5 +8,8 @@ yarn swagger-typescript-api -p fixtures/openapi.yaml \
     --modular --axios --single-http-client --extract-request-params --extract-request-body --responses \
     -o packages/aptos-api/src/
 
-sed -i 's/http-client"/http-client.js"/g' src/*
-sed -i 's/data-contracts"/data-contracts.js"/g' src/*
+sed -i 's/http-client"/http-client.js"/g' packages/aptos-api/src/*
+sed -i 's/data-contracts"/data-contracts.js"/g' packages/aptos-api/src/*
+sed -i 's/import axios, {/import { default as axios,/g' packages/aptos-api/src/*
+
+yarn prettier --write fixtures/openapi.yaml
