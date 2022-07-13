@@ -28,11 +28,28 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@aptosis/aptos-client@workspace:packages/aptos-client":
+"@aptosis/aptos-client@workspace:^, @aptosis/aptos-client@workspace:packages/aptos-client":
   version: 0.0.0-use.local
   resolution: "@aptosis/aptos-client@workspace:packages/aptos-client"
   dependencies:
     "@aptosis/aptos-api": "workspace:^"
+    "@saberhq/tsconfig": ^2.0.2
+    "@vespaiach/axios-fetch-adapter": ^0.3.0
+    axios: ^0.27.2
+    tslib: ^2.4.0
+    typescript: ^4.7.4
+  peerDependencies:
+    axios: ^0.27.2
+  languageName: unknown
+  linkType: soft
+
+"@aptosis/faucet-client@workspace:packages/faucet-client":
+  version: 0.0.0-use.local
+  resolution: "@aptosis/faucet-client@workspace:packages/faucet-client"
+  dependencies:
+    "@aptosis/aptos-api": "workspace:^"
+    "@aptosis/aptos-client": "workspace:^"
+    "@movingco/core": ^0.1.47
     "@saberhq/tsconfig": ^2.0.2
     "@vespaiach/axios-fetch-adapter": ^0.3.0
     axios: ^0.27.2
@@ -825,6 +842,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@movingco/core@npm:^0.1.47":
+  version: 0.1.47
+  resolution: "@movingco/core@npm:0.1.47"
+  dependencies:
+    "@movingco/sha3": ^0.1.46
+    "@saberhq/option-utils": ^1.13.32
+    "@ubeswap/token-math": ^5.1.6
+    bn.js: ^5.2.1
+    buffer: ^6.0.3
+    tiny-invariant: ^1.2.0
+    tslib: ^2.4.0
+  peerDependencies:
+    bn.js: ^5.2.0
+    jsbi: ^4.3.0
+  checksum: 28eba0066f12b37a8c8e488900410eb6bcd1a85b7a58ad2423142d5f8a8dd1f705bd9b74d3df0795e64b2aa1b30b6d02f41197e80f3a41a5cc48dc4871e57fe3
+  languageName: node
+  linkType: hard
+
+"@movingco/sha3@npm:^0.1.46":
+  version: 0.1.46
+  resolution: "@movingco/sha3@npm:0.1.46"
+  dependencies:
+    js-sha3: ^0.8.0
+    tiny-invariant: ^1.2.0
+    tslib: ^2.4.0
+  checksum: 205dac7300b5ecf53bd51c3da4c731483bbea1ddef129a36abd108cf624034c4190982e4e621bee8d9c9b1ed3622332abc3fab425bf8555419984b7658351ba9
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -895,6 +941,15 @@ __metadata:
   peerDependencies:
     eslint: ">=7"
   checksum: d5ca8160f173d10ec69a5363bcc43990e2e5ea753b23e5c5b860285868046c8ea98517ed201948fd37b04230661a5e5535b67e442567b3e25402efb8d4a26383
+  languageName: node
+  linkType: hard
+
+"@saberhq/option-utils@npm:^1.13.32":
+  version: 1.13.32
+  resolution: "@saberhq/option-utils@npm:1.13.32"
+  dependencies:
+    tslib: ^2.4.0
+  checksum: 9426216b75a7817680f44569d309256a28da809e1c593bc50033cb9426793465d0b392e1949d6964d3b34f2e1369bb3a25df42c1b7cacc2a14a87c029f666832
   languageName: node
   linkType: hard
 
@@ -998,6 +1053,13 @@ __metadata:
   dependencies:
     "@babel/types": ^7.3.0
   checksum: 8992d8c1eaaf1c793e9184b930767883446939d2744c40ea4e9591086e79b631189dc519931ed8864f1e016742a189703c217db59b800aca84870b865009d8b4
+  languageName: node
+  linkType: hard
+
+"@types/big.js@npm:^6.1.3":
+  version: 6.1.5
+  resolution: "@types/big.js@npm:6.1.5"
+  checksum: 5eb1472c1fb05fef37971aed449aa8dbe485fde1ca1c316911ae8cbd437ecd1f3a56964fc7d439bdcbe8e2585ec3febabc205d291177d5a0119bafaf872604b8
   languageName: node
   linkType: hard
 
@@ -1343,6 +1405,22 @@ __metadata:
     "@typescript-eslint/types": 5.30.6
     eslint-visitor-keys: ^3.3.0
   checksum: e4ec0541d685d211274724c9f1887b6cdd03c7fc4fbdd1ea74c18311c3a5a9a2d4c676448ea714687ca13cc881ec5c73605de75fbf38f302ba8ea86d2b77897f
+  languageName: node
+  linkType: hard
+
+"@ubeswap/token-math@npm:^5.1.6":
+  version: 5.1.6
+  resolution: "@ubeswap/token-math@npm:5.1.6"
+  dependencies:
+    "@types/big.js": ^6.1.3
+    big.js: ^6.2.0
+    decimal.js-light: ^2.5.1
+    tiny-invariant: ^1.2.0
+    tslib: ^2.4.0
+  peerDependencies:
+    bn.js: ^5.2.0
+    jsbi: ^3 || ^4
+  checksum: c8a38214eeb627d6ab709858d45d30351e66cc3a490a32d7a6eb8756155da43f2c1389d047089ca90f19822416dfdcd85ce8ef1487e3d2a468a555174a51181b
   languageName: node
   linkType: hard
 
@@ -2139,6 +2217,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"big.js@npm:^6.2.0":
+  version: 6.2.1
+  resolution: "big.js@npm:6.2.1"
+  checksum: 0b234a2fd56c52bed2798ed2020bcab6fef5e9523b99a05406ad071d1aed6ee97ada9fb8de9576092da74c68825c276e19015743b8d1baea269b60a5c666b0cd
+  languageName: node
+  linkType: hard
+
 "bl@npm:^4.0.3":
   version: 4.1.0
   resolution: "bl@npm:4.1.0"
@@ -2232,6 +2317,16 @@ __metadata:
     base64-js: ^1.3.1
     ieee754: ^1.1.13
   checksum: e2cf8429e1c4c7b8cbd30834ac09bd61da46ce35f5c22a78e6c2f04497d6d25541b16881e30a019c6fd3154150650ccee27a308eff3e26229d788bbdeb08ab84
+  languageName: node
+  linkType: hard
+
+"buffer@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "buffer@npm:6.0.3"
+  dependencies:
+    base64-js: ^1.3.1
+    ieee754: ^1.2.1
+  checksum: 5ad23293d9a731e4318e420025800b42bf0d264004c0286c8cc010af7a270c7a0f6522e84f54b9ad65cbd6db20b8badbfd8d2ebf4f80fa03dab093b89e68c3f9
   languageName: node
   linkType: hard
 
@@ -2648,6 +2743,13 @@ __metadata:
   dependencies:
     ms: ^2.1.1
   checksum: b3d8c5940799914d30314b7c3304a43305fd0715581a919dacb8b3176d024a782062368405b47491516d2091d6462d4d11f2f4974a405048094f8bfebfa3071c
+  languageName: node
+  linkType: hard
+
+"decimal.js-light@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "decimal.js-light@npm:2.5.1"
+  checksum: f5a2c7eac1c4541c8ab8a5c8abea64fc1761cefc7794bd5f8afd57a8a78d1b51785e0c4e4f85f4895a043eaa90ddca1edc3981d1263eb6ddce60f32bf5fe66c9
   languageName: node
   linkType: hard
 
@@ -3851,7 +3953,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ieee754@npm:^1.1.13":
+"ieee754@npm:^1.1.13, ieee754@npm:^1.2.1":
   version: 1.2.1
   resolution: "ieee754@npm:1.2.1"
   checksum: 5144c0c9815e54ada181d80a0b810221a253562422e7c6c3a60b1901154184f49326ec239d618c416c1c5945a2e197107aee8d986a3dd836b53dffefd99b5e7e
@@ -4677,6 +4779,13 @@ __metadata:
   bin:
     jest: bin/jest.js
   checksum: b9dcb542eb7c16261c281cdc2bf37155dbb3f1205bae0b567f05051db362c85ddd4b765f126591efb88f6d298eb10336d0aa6c7d5373b4d53f918137a9a70182
+  languageName: node
+  linkType: hard
+
+"js-sha3@npm:^0.8.0":
+  version: 0.8.0
+  resolution: "js-sha3@npm:0.8.0"
+  checksum: 75df77c1fc266973f06cce8309ce010e9e9f07ec35ab12022ed29b7f0d9c8757f5a73e1b35aa24840dced0dea7059085aa143d817aea9e188e2a80d569d9adce
   languageName: node
   linkType: hard
 
@@ -6745,6 +6854,13 @@ __metadata:
   version: 2.3.8
   resolution: "through@npm:2.3.8"
   checksum: a38c3e059853c494af95d50c072b83f8b676a9ba2818dcc5b108ef252230735c54e0185437618596c790bbba8fcdaef5b290405981ffa09dce67b1f1bf190cbd
+  languageName: node
+  linkType: hard
+
+"tiny-invariant@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "tiny-invariant@npm:1.2.0"
+  checksum: e09a718a7c4a499ba592cdac61f015d87427a0867ca07f50c11fd9b623f90cdba18937b515d4a5e4f43dac92370498d7bdaee0d0e7a377a61095e02c4a92eade
   languageName: node
   linkType: hard
 
