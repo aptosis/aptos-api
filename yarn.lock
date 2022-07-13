@@ -51,12 +51,17 @@ __metadata:
     "@aptosis/aptos-client": "workspace:^"
     "@movingco/core": ^0.1.47
     "@saberhq/tsconfig": ^2.0.2
+    "@types/bn.js": ^5.1.0
     "@vespaiach/axios-fetch-adapter": ^0.3.0
     axios: ^0.27.2
+    bn.js: ^5.2.1
+    jsbi: ^4.3.0
     tslib: ^2.4.0
     typescript: ^4.7.4
   peerDependencies:
     axios: ^0.27.2
+    bn.js: ^5.2.1
+    jsbi: ^4.3.0
   languageName: unknown
   linkType: soft
 
@@ -4816,6 +4821,13 @@ __metadata:
   bin:
     js-yaml: bin/js-yaml.js
   checksum: c7830dfd456c3ef2c6e355cc5a92e6700ceafa1d14bba54497b34a99f0376cecbb3e9ac14d3e5849b426d5a5140709a66237a8c991c675431271c4ce5504151a
+  languageName: node
+  linkType: hard
+
+"jsbi@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "jsbi@npm:4.3.0"
+  checksum: 27c4f178eb7fd9d1756144066fdebc62f4a0176e877f55e646e8ce84075c13551bd575a316b9959ccdcca9d5dc05a81c9907cfa09f0cfeb43c9777797e36b0e9
   languageName: node
   linkType: hard
 
