@@ -49,7 +49,7 @@ __metadata:
   dependencies:
     "@aptosis/aptos-api": "workspace:^"
     "@aptosis/aptos-client": "workspace:^"
-    "@movingco/core": ^0.1.47
+    "@movingco/core": ^0.1.49
     "@saberhq/tsconfig": ^2.0.2
     "@types/bn.js": ^5.1.0
     "@vespaiach/axios-fetch-adapter": ^0.3.0
@@ -847,13 +847,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@movingco/core@npm:^0.1.47":
-  version: 0.1.47
-  resolution: "@movingco/core@npm:0.1.47"
+"@movingco/core@npm:^0.1.49":
+  version: 0.1.49
+  resolution: "@movingco/core@npm:0.1.49"
   dependencies:
-    "@movingco/sha3": ^0.1.46
+    "@movingco/sha3": ^0.1.48
     "@saberhq/option-utils": ^1.13.32
-    "@ubeswap/token-math": ^5.1.6
+    "@ubeswap/token-math": ^5.2.0
     bn.js: ^5.2.1
     buffer: ^6.0.3
     tiny-invariant: ^1.2.0
@@ -861,18 +861,18 @@ __metadata:
   peerDependencies:
     bn.js: ^5.2.0
     jsbi: ^4.3.0
-  checksum: 28eba0066f12b37a8c8e488900410eb6bcd1a85b7a58ad2423142d5f8a8dd1f705bd9b74d3df0795e64b2aa1b30b6d02f41197e80f3a41a5cc48dc4871e57fe3
+  checksum: 72465758cc64af4d4a476ba8af86d2d708562d9aa1f4043c667e94e7859cad5c55562491e106675aaf4172c7a080ff6232a71b2641fd3eafd693ca96a17724c7
   languageName: node
   linkType: hard
 
-"@movingco/sha3@npm:^0.1.46":
-  version: 0.1.46
-  resolution: "@movingco/sha3@npm:0.1.46"
+"@movingco/sha3@npm:^0.1.48":
+  version: 0.1.48
+  resolution: "@movingco/sha3@npm:0.1.48"
   dependencies:
     js-sha3: ^0.8.0
     tiny-invariant: ^1.2.0
     tslib: ^2.4.0
-  checksum: 205dac7300b5ecf53bd51c3da4c731483bbea1ddef129a36abd108cf624034c4190982e4e621bee8d9c9b1ed3622332abc3fab425bf8555419984b7658351ba9
+  checksum: 0ac0bbde1d149f2ddd0c5763f4735f4b14675513ace272cad51cb782aaefde43f8028501f6e2f05990ad12d15a55ec6f9f7de4fce1fb4dd58dd33796dea6bbd1
   languageName: node
   linkType: hard
 
@@ -1061,7 +1061,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/big.js@npm:^6.1.3":
+"@types/big.js@npm:^6.1.5":
   version: 6.1.5
   resolution: "@types/big.js@npm:6.1.5"
   checksum: 5eb1472c1fb05fef37971aed449aa8dbe485fde1ca1c316911ae8cbd437ecd1f3a56964fc7d439bdcbe8e2585ec3febabc205d291177d5a0119bafaf872604b8
@@ -1215,10 +1215,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.0.3":
-  version: 18.0.3
-  resolution: "@types/node@npm:18.0.3"
-  checksum: 5dec59fbbc1186c808b53df1ca717dad034dbd6a901c75f5b052c845618b531b05f27217122c6254db99529a68618e4cfc534ae3dbf4e88754e9e572df80defa
+"@types/node@npm:^18.0.4":
+  version: 18.0.4
+  resolution: "@types/node@npm:18.0.4"
+  checksum: 981284fd57941f233f0e77038087c122f56e3c2b4fc4e090dfc7f0a93abfc526d5ccdd59eb3ef551d713245cf3943e37c7b957f12ba699209341a447c39fab59
   languageName: node
   linkType: hard
 
@@ -1413,19 +1413,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ubeswap/token-math@npm:^5.1.6":
-  version: 5.1.6
-  resolution: "@ubeswap/token-math@npm:5.1.6"
+"@ubeswap/token-math@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "@ubeswap/token-math@npm:5.2.0"
   dependencies:
-    "@types/big.js": ^6.1.3
-    big.js: ^6.2.0
+    "@types/big.js": ^6.1.5
+    big.js: ^6.2.1
     decimal.js-light: ^2.5.1
     tiny-invariant: ^1.2.0
     tslib: ^2.4.0
   peerDependencies:
-    bn.js: ^5.2.0
     jsbi: ^3 || ^4
-  checksum: c8a38214eeb627d6ab709858d45d30351e66cc3a490a32d7a6eb8756155da43f2c1389d047089ca90f19822416dfdcd85ce8ef1487e3d2a468a555174a51181b
+  checksum: ddbd049f1db973acabc841835bf331d74b6101e6969feb43034f20fc2ce011c06cbd7d80a241fb88a0bb159db4a294d30810df00150b46259a7fc14da7336166
   languageName: node
   linkType: hard
 
@@ -2222,7 +2221,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"big.js@npm:^6.2.0":
+"big.js@npm:^6.2.1":
   version: 6.2.1
   resolution: "big.js@npm:6.2.1"
   checksum: 0b234a2fd56c52bed2798ed2020bcab6fef5e9523b99a05406ad071d1aed6ee97ada9fb8de9576092da74c68825c276e19015743b8d1baea269b60a5c666b0cd
@@ -7251,7 +7250,7 @@ __metadata:
     "@types/bn.js": ^5.1.0
     "@types/eslint": ^8.4.5
     "@types/jest": ^28.1.5
-    "@types/node": ^18.0.3
+    "@types/node": ^18.0.4
     "@types/prettier": ^2.6.3
     "@typescript-eslint/utils": ^5.30.6
     "@yarnpkg/doctor": ^3.1.3
