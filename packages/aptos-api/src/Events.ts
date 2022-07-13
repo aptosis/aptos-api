@@ -31,7 +31,10 @@ export class Events<SecurityDataType = unknown> {
    * @response `404` `(AptosError)`
    * @response `500` `(AptosError)`
    */
-  getEventsByEventKey = (eventKey: HexEncodedBytes, params: RequestParams = {}) =>
+  getEventsByEventKey = (
+    eventKey: HexEncodedBytes,
+    params: RequestParams = {}
+  ) =>
     this.http.request<Event[], AptosError>({
       path: `/events/${eventKey}`,
       method: "GET",

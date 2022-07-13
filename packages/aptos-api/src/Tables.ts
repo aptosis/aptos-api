@@ -33,7 +33,11 @@ export class Tables<SecurityDataType = unknown> {
    * @response `415` `(AptosError)`
    * @response `500` `(AptosError)`
    */
-  getTableItem = (tableHandle: string, data: TableItemRequest, params: RequestParams = {}) =>
+  getTableItem = (
+    tableHandle: string,
+    data: TableItemRequest,
+    params: RequestParams = {}
+  ) =>
     this.http.request<object, AptosError>({
       path: `/tables/${tableHandle}/item`,
       method: "POST",

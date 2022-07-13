@@ -13,3 +13,4 @@ sed -i 's/data-contracts"/data-contracts.js"/g' packages/aptos-api/src/*
 sed -i 's/import axios, {/import { default as axios,/g' packages/aptos-api/src/*
 
 yarn prettier --write fixtures/openapi.yaml
+yarn prettier --write packages/aptos-api/src/*.ts

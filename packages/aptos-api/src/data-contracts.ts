@@ -459,7 +459,9 @@ export interface UserTransactionRequest {
   payload: TransactionPayload;
 }
 
-export type UserCreateSigningMessageRequest = UserTransactionRequest & { secondary_signers?: Address[] };
+export type UserCreateSigningMessageRequest = UserTransactionRequest & {
+  secondary_signers?: Address[];
+};
 
 /**
  * This schema is used for appending `signature` field to another schema.
@@ -475,9 +477,13 @@ export type Transaction =
   | BlockMetadataTransaction
   | StateCheckpointTransaction;
 
-export type SubmitTransactionRequest = UserTransactionRequest & UserTransactionSignature;
+export type SubmitTransactionRequest = UserTransactionRequest &
+  UserTransactionSignature;
 
-export type PendingTransaction = { type: string; hash: HexEncodedBytes } & UserTransactionRequest &
+export type PendingTransaction = {
+  type: string;
+  hash: HexEncodedBytes;
+} & UserTransactionRequest &
   UserTransactionSignature;
 
 export type OnChainTransaction =
@@ -540,7 +546,11 @@ export interface OnChainTransactionInfo {
   changes: WriteSetChange[];
 }
 
-export type UserTransaction = { type: string; events: Event[]; timestamp: TimestampUsec } & UserTransactionRequest &
+export type UserTransaction = {
+  type: string;
+  events: Event[];
+  timestamp: TimestampUsec;
+} & UserTransactionRequest &
   UserTransactionSignature &
   OnChainTransactionInfo;
 
@@ -553,11 +563,22 @@ export type BlockMetadataTransaction = {
   timestamp: TimestampUsec;
 } & OnChainTransactionInfo;
 
-export type GenesisTransaction = { type: string; events: Event[]; payload: WriteSetPayload } & OnChainTransactionInfo;
+export type GenesisTransaction = {
+  type: string;
+  events: Event[];
+  payload: WriteSetPayload;
+} & OnChainTransactionInfo;
 
-export type StateCheckpointTransaction = { type: string; timestamp: TimestampUsec } & OnChainTransactionInfo;
+export type StateCheckpointTransaction = {
+  type: string;
+  timestamp: TimestampUsec;
+} & OnChainTransactionInfo;
 
-export type TransactionPayload = ScriptFunctionPayload | ScriptPayload | ModuleBundlePayload | WriteSetPayload;
+export type TransactionPayload =
+  | ScriptFunctionPayload
+  | ScriptPayload
+  | ModuleBundlePayload
+  | WriteSetPayload;
 
 /**
  * @example {"type":"script_function_payload","function":"0x1::PaymentScripts::peer_to_peer_with_metadata","type_arguments":["0x1::XDX::XDX"],"arguments":["0x1668f6be25668c1a17cd8caf6b8d2f25","2021000000","0x","0x"]}
@@ -968,7 +989,10 @@ export interface Event {
   data: MoveValue;
 }
 
-export type TransactionSignature = Ed25519Signature | MultiEd25519Signature | MultiAgentSignature;
+export type TransactionSignature =
+  | Ed25519Signature
+  | MultiEd25519Signature
+  | MultiAgentSignature;
 
 /**
 * Please refer to https://github.com/aptos-labs/aptos-core/tree/main/documentation/specifications/crypto#signature-and-verification for
