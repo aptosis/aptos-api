@@ -1,0 +1,9 @@
+{
+  "extends": "@saberhq/tsconfig/tsconfig.mono.dom.json",
+  "compilerOptions": {
+    "moduleResolution": "Node16",
+    "rootDir": "./src",
+    "outDir": "dist/esm/"
+  },
+  "include": ["src/"]
+}
