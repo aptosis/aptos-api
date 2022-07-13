@@ -1,0 +1,4 @@
+undecided:
+  - workspace
+  - "@aptosis/aptos-api"
+  - "@aptosis/aptos-client"
