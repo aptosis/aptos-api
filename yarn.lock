@@ -43,6 +43,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@aptosis/aptos-typed-api@workspace:packages/aptos-typed-api":
+  version: 0.0.0-use.local
+  resolution: "@aptosis/aptos-typed-api@workspace:packages/aptos-typed-api"
+  dependencies:
+    "@aptosis/aptos-api": "workspace:^"
+    "@saberhq/tsconfig": ^2.0.2
+    tslib: ^2.4.0
+    typescript: ^4.7.4
+  languageName: unknown
+  linkType: soft
+
 "@aptosis/faucet-client@workspace:packages/faucet-client":
   version: 0.0.0-use.local
   resolution: "@aptosis/faucet-client@workspace:packages/faucet-client"

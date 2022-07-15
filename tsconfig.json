@@ -5,6 +5,7 @@
   "references": [
     { "path": "packages/aptos-api/" },
     { "path": "packages/aptos-client/" },
+    { "path": "packages/aptos-typed-api/" },
     { "path": "packages/faucet-client/" }
   ]
 }
