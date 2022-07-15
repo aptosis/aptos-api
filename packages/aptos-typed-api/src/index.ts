@@ -1,7 +1,3 @@
-/**
- * [[include:aptos-typed-api/README.md]]
- * @module
- */
 import type * as api from "@aptosis/aptos-api";
 
 /**

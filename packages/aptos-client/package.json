@@ -44,5 +44,8 @@
   },
   "peerDependencies": {
     "axios": "^0.27.2"
+  },
+  "typedoc": {
+    "readmeFile": "./README.md"
   }
 }

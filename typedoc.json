@@ -1,0 +1,10 @@
+{
+  "excludePrivate": true,
+  "includeVersion": true,
+  "out": "docs/",
+  "entryPointStrategy": "packages",
+  "includes": "packages/",
+  "readme": "./README.md",
+  "name": "Aptos TypeScript API Wrapper",
+  "gaID": "G-WYT5TL6CE2"
+}
