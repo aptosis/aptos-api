@@ -28,7 +28,7 @@ export class FaucetClient extends AptosAPI {
   ): Promise<HexEncodedBytes[]> {
     const url = `${
       this.faucetUrl
-    }/mint?amount=${amount}&address=${HexString.ensure(address).noPrefix()}`;
+    }/mint?amount=${amount}&address=${HexString.ensure(address).hex()}`;
     const response = await axios.post<Array<string>>(
       url,
       {},

@@ -49,7 +49,7 @@ __metadata:
   dependencies:
     "@aptosis/aptos-api": "workspace:^"
     "@aptosis/aptos-client": "workspace:^"
-    "@movingco/core": ^0.1.50
+    "@movingco/core": ^0.1.51
     "@saberhq/tsconfig": ^2.0.2
     "@vespaiach/axios-fetch-adapter": ^0.3.0
     axios: ^0.27.2
@@ -844,11 +844,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@movingco/core@npm:^0.1.50":
-  version: 0.1.50
-  resolution: "@movingco/core@npm:0.1.50"
+"@movingco/core@npm:^0.1.51":
+  version: 0.1.51
+  resolution: "@movingco/core@npm:0.1.51"
   dependencies:
-    "@movingco/sha3": ^0.1.49
+    "@movingco/sha3": ^0.1.50
     "@saberhq/option-utils": ^1.13.32
     "@ubeswap/token-math": ^5.2.0
     buffer: ^6.0.3
@@ -856,18 +856,18 @@ __metadata:
     tslib: ^2.4.0
   peerDependencies:
     jsbi: ^4.3.0
-  checksum: 863917e382296ca320ae21ed8d8f50b975dd74da04ec2d11a978e794c86bcbb4ad9af52ac0ee405c273ad2ce6551be79d6f83c8ad936f957963e6fe129b5d6e3
+  checksum: 0794676281d5d3f61f47deb018ff589ffc95917bd687bcdaa89d0e73ed3d72a3ceeb51b67436691dccd299ed7424fc0cf3de50192d4883a5c27c357b8ad9a403
   languageName: node
   linkType: hard
 
-"@movingco/sha3@npm:^0.1.49":
-  version: 0.1.49
-  resolution: "@movingco/sha3@npm:0.1.49"
+"@movingco/sha3@npm:^0.1.50":
+  version: 0.1.50
+  resolution: "@movingco/sha3@npm:0.1.50"
   dependencies:
     js-sha3: ^0.8.0
     tiny-invariant: ^1.2.0
     tslib: ^2.4.0
-  checksum: 7e8c06a7ad6f6488a9e6e0242359a7a56c1bbe5cc5a542e933c08b943fbfaccb8d49e5bb376c541c2285994d380d77251c12263b65e84fbdeeb1c0f18faa8f60
+  checksum: 302b52b49424670a01298ddc0e19cae9a723fc389cba458c5e6c416b0a48a78369efa5ee35263506d1ac515504795b52c8d3b2320d4e8f1affec4bc3be435559
   languageName: node
   linkType: hard
 
