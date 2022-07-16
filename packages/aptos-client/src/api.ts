@@ -10,6 +10,24 @@ export type APIClientConfig = Omit<
 >;
 
 /**
+ * Creates a new HTTP client.
+ * @param nodeUrl
+ * @param config
+ * @returns
+ */
+export const createHttpClient = (
+  nodeUrl: string,
+  config: APIClientConfig = {}
+): HttpClient =>
+  new HttpClient({
+    withCredentials: false,
+    baseURL: nodeUrl,
+    validateStatus: () => true, // Don't explode here on error responses; let our code handle it
+    adapter: typeof fetch !== "undefined" ? fetchAdapter : undefined,
+    ...config,
+  });
+
+/**
  * Lightweight alternative wrapper to the official Aptos client.
  */
 export class AptosAPI {
@@ -20,13 +38,7 @@ export class AptosAPI {
 
   constructor(readonly nodeUrl: string, config: APIClientConfig = {}) {
     // `withCredentials` ensures cookie handling
-    this.client = new HttpClient({
-      withCredentials: false,
-      baseURL: nodeUrl,
-      validateStatus: () => true, // Don't explode here on error responses; let our code handle it
-      adapter: fetchAdapter,
-      ...config,
-    });
+    this.client = createHttpClient(nodeUrl, config);
 
     this.accounts = new Accounts(this.client);
     this.transactions = new Transactions(this.client);

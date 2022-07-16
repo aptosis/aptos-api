@@ -20,13 +20,18 @@ export class FaucetClient {
     address: MaybeHexString,
     amount: number
   ): Promise<HexEncodedBytes[]> {
-    const url = `${
-      this.faucetUrl
-    }/mint?amount=${amount}&address=${HexString.ensure(address).hex()}`;
+    const url = `${this.faucetUrl}/mint`;
     const response = await axios.post<Array<string>>(
       url,
       {},
-      { validateStatus: () => true, adapter: fetchAdapter }
+      {
+        params: {
+          amount,
+          address: HexString.ensure(address).hex(),
+        },
+        validateStatus: () => true,
+        adapter: typeof fetch !== "undefined" ? fetchAdapter : undefined,
+      }
     );
     raiseForStatus(200, response as AptosAPIResponse<unknown>);
     return response.data;
