@@ -1,6 +1,7 @@
 {
-  "extends": "@saberhq/tsconfig/tsconfig.cjs.json",
+  "extends": "@saberhq/tsconfig/tsconfig.mono.cjs.json",
   "compilerOptions": {
+    "rootDir": "./src",
     "lib": ["ES2019", "DOM"],
     "outDir": "dist/cjs/"
   },

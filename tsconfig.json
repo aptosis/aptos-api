@@ -4,8 +4,12 @@
   "include": ["packages/**/*.spec.ts", "jest.config.mjs", ".eslintrc.cjs"],
   "references": [
     { "path": "packages/aptos-api/" },
+    { "path": "packages/aptos-api/tsconfig.cjs.json" },
     { "path": "packages/aptos-client/" },
+    { "path": "packages/aptos-client/tsconfig.cjs.json" },
     { "path": "packages/aptos-typed-api/" },
-    { "path": "packages/faucet-client/" }
+    { "path": "packages/aptos-typed-api/tsconfig.cjs.json" },
+    { "path": "packages/faucet-client/" },
+    { "path": "packages/faucet-client/tsconfig.cjs.json" }
   ]
 }

@@ -30,7 +30,8 @@
     "typescript": "^4.7.4"
   },
   "scripts": {
-    "build": "yarn workspaces foreach --exclude workspace -vpti --topological-dev run build",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
     "publish:all": "yarn workspaces foreach --exclude workspace -vpti --topological-dev npm publish",
     "docs:generate": "typedoc .",
     "bump": "yarn workspaces foreach -t version",
