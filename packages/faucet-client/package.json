@@ -1,6 +1,6 @@
 {
   "name": "@aptosis/faucet-client",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Lightweight Aptos faucet client.",
   "author": "Ian Macalinao <ian@aptos.is>",
   "homepage": "https://github.com/aptosis/aptos-api#readme",
