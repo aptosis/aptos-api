@@ -38,7 +38,6 @@
     "test": "jest --passWithNoTests",
     "lint": "eslint . --cache",
     "lint:ci": "eslint . --max-warnings=0",
-    "typecheck": "tsc --build",
     "prepare": "husky install"
   },
   "lint-staged": {
