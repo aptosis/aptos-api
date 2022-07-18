@@ -1,26 +1,7 @@
 import type * as api from "@aptosis/aptos-api";
+import type { ScriptFunctionPayload } from "@movingco/move-types";
 
-/**
- * {@inheritDoc "@aptosis/aptos-api".Address}
- */
-export type Address = `0x${string}`;
-
-/**
- * {@inheritDoc "@aptosis/aptos-api".MoveModuleId}
- */
-export type MoveModuleId<
-  TAddress extends Address = Address,
-  TModule extends string = string
-> = `${TAddress}::${TModule}`;
-
-/**
- * {@inheritDoc "@aptosis/aptos-api".ScriptFunctionId}
- */
-export type ScriptFunctionId<
-  TAddress extends Address = Address,
-  TModule extends string = string,
-  TFunction extends string = string
-> = `${MoveModuleId<TAddress, TModule>}::${TFunction}`;
+export * from "@movingco/move-types";
 
 /**
  * {@inheritDoc "@aptosis/aptos-api".AccountResource}
@@ -64,17 +45,24 @@ export type TransactionPayload<
 };
 
 /**
- * {@inheritDoc "@aptosis/aptos-api".ScriptFunctionPayload}
+ * {@inheritDoc "@aptosis/aptos-api".UserTransactionRequest}
  */
-export interface ScriptFunctionPayload<
-  TFunctionId extends ScriptFunctionId = ScriptFunctionId
-> extends Omit<api.ScriptFunctionPayload, "type"> {
+export interface UserTransactionRequest<
+  TType extends TransactionPayloadType = TransactionPayloadType
+> extends Omit<api.UserTransactionRequest, "payload"> {
   /**
-   * Hard-coded argument showing this is a script function payload.
+   * Transaction payload type.
    */
-  readonly type: "script_function_payload";
-  /**
-   * {@inheritDoc "@aptosis/aptos-api".ScriptFunctionPayload#function}
-   */
-  readonly function: TFunctionId;
+  readonly payload: TransactionPayload<TType>;
 }
+
+/**
+ * {@inheritDoc "@aptosis/aptos-api".UserCreateSigningMessageRequest}
+ */
+export interface UserCreateSigningMessageRequest<
+  TType extends TransactionPayloadType = TransactionPayloadType
+> extends UserTransactionRequest<TType>,
+    Omit<
+      api.UserCreateSigningMessageRequest,
+      keyof api.UserTransactionRequest
+    > {}

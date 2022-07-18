@@ -19,7 +19,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@aptosis/aptos-api@workspace:packages/aptos-api"
   dependencies:
-    "@saberhq/tsconfig": ^2.0.2
+    "@saberhq/tsconfig": ^2.0.3
     axios: ^0.27.2
     tslib: ^2.4.0
     typescript: ^4.7.4
@@ -33,7 +33,7 @@ __metadata:
   resolution: "@aptosis/aptos-client@workspace:packages/aptos-client"
   dependencies:
     "@aptosis/aptos-api": "workspace:^"
-    "@saberhq/tsconfig": ^2.0.2
+    "@saberhq/tsconfig": ^2.0.3
     "@vespaiach/axios-fetch-adapter": ^0.3.0
     axios: ^0.27.2
     tslib: ^2.4.0
@@ -48,7 +48,9 @@ __metadata:
   resolution: "@aptosis/aptos-typed-api@workspace:packages/aptos-typed-api"
   dependencies:
     "@aptosis/aptos-api": "workspace:^"
-    "@saberhq/tsconfig": ^2.0.2
+    "@movingco/move-types": ^0.1.55
+    "@saberhq/tsconfig": ^2.0.3
+    jsbi: ^4.3.0
     tslib: ^2.4.0
     typescript: ^4.7.4
   peerDependencies:
@@ -62,8 +64,8 @@ __metadata:
   dependencies:
     "@aptosis/aptos-api": "workspace:^"
     "@aptosis/aptos-client": "workspace:^"
-    "@movingco/core": ^0.1.54
-    "@saberhq/tsconfig": ^2.0.2
+    "@movingco/core": ^0.1.56
+    "@saberhq/tsconfig": ^2.0.3
     "@vespaiach/axios-fetch-adapter": ^0.3.0
     axios: ^0.27.2
     jsbi: ^4.3.0
@@ -857,11 +859,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@movingco/core@npm:^0.1.54":
-  version: 0.1.54
-  resolution: "@movingco/core@npm:0.1.54"
+"@movingco/core@npm:^0.1.56":
+  version: 0.1.56
+  resolution: "@movingco/core@npm:0.1.56"
   dependencies:
-    "@movingco/sha3": ^0.1.53
+    "@movingco/sha3": ^0.1.55
     "@saberhq/option-utils": ^1.13.32
     "@ubeswap/token-math": ^5.2.0
     buffer: ^6.0.3
@@ -869,18 +871,28 @@ __metadata:
     tslib: ^2.4.0
   peerDependencies:
     jsbi: ^4.3.0
-  checksum: bdf8644135542c09bbf07ca65dda93e28b4d6a1cd0e90702cc609cbca8bc9a62cf37fa3b5578cbc4d8fbd0c745a22b34063125274bb04ee7bd986ed11ce6d454
+  checksum: 92323c5c73693df3e126782a378cc9985a9cd504a62f605683f7d9bbdb1e67af05a3916c8685a9aaa661f70de9429bfbb9f8da82c9408137f405238460a94676
   languageName: node
   linkType: hard
 
-"@movingco/sha3@npm:^0.1.53":
-  version: 0.1.53
-  resolution: "@movingco/sha3@npm:0.1.53"
+"@movingco/move-types@npm:^0.1.55":
+  version: 0.1.55
+  resolution: "@movingco/move-types@npm:0.1.55"
+  dependencies:
+    tiny-invariant: ^1.2.0
+    tslib: ^2.4.0
+  checksum: 389246c2c9112c84e2e9338d0e71468842f8784e232ad55fe778d2f636295f32c81e24be5594d8bb06929eba196c2ec0d3fed1e14b1b33dc50334a803de5c20b
+  languageName: node
+  linkType: hard
+
+"@movingco/sha3@npm:^0.1.55":
+  version: 0.1.55
+  resolution: "@movingco/sha3@npm:0.1.55"
   dependencies:
     js-sha3: ^0.8.0
     tiny-invariant: ^1.2.0
     tslib: ^2.4.0
-  checksum: a4d0d74691a65d49afc542e7c28c4f7d6ccce29bfc45d5f4f9a6dd51cab52dab7caa3fffafbd2ad0e3e76a3feea3fc4bc790d46a179ff1f64cab4a50bd1e64e2
+  checksum: 849f141b311c123b2a7aa7644d1142d4f7a1249e571f6fc79a165b8be81c6af6465eab761d37727caec24c5c65c99c2cb79f0a45a9b22f4a90b6b256cad91a3e
   languageName: node
   linkType: hard
 
@@ -938,9 +950,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@saberhq/eslint-config@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@saberhq/eslint-config@npm:2.0.2"
+"@saberhq/eslint-config@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "@saberhq/eslint-config@npm:2.0.3"
   dependencies:
     "@typescript-eslint/eslint-plugin": ^5.30.6
     "@typescript-eslint/parser": ^5.30.6
@@ -953,7 +965,7 @@ __metadata:
     prettier: ^2.7.1
   peerDependencies:
     eslint: ">=7"
-  checksum: d5ca8160f173d10ec69a5363bcc43990e2e5ea753b23e5c5b860285868046c8ea98517ed201948fd37b04230661a5e5535b67e442567b3e25402efb8d4a26383
+  checksum: 42823db57c4ef610b00b5f83f2a80f486ddebe28f56f295bb6adcffe1474f239eff5686dc7ddaa9e2f3c8a0f4414cde287ba84953786d86a956294802c3acb28
   languageName: node
   linkType: hard
 
@@ -966,10 +978,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@saberhq/tsconfig@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@saberhq/tsconfig@npm:2.0.2"
-  checksum: 0b33eea8e68155b053a2a7c8562e55ae4e7b581be12ff129fe80df3103b7c09558192cee8b2afe56bc9eccef7867acaadd494bf016173085d08a0733cf96792d
+"@saberhq/tsconfig@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "@saberhq/tsconfig@npm:2.0.3"
+  checksum: ed997cd6772cef717cc001426d7e99402d349b4f90c23e17c22c628888127d6dd7fe0d76cc2d9a79eddef6fd410145b3fff87daf6ddb29b00cff2e0b43720612
   languageName: node
   linkType: hard
 
@@ -1214,10 +1226,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.0.5":
-  version: 18.0.5
-  resolution: "@types/node@npm:18.0.5"
-  checksum: cc9c67d0074252f798d226dd95a22e0e8851cf7fc623ef4a603d9ad2c2b46650f930147062ea33719008b1de67f08f499ad693307d02f8396e6f1fead8144329
+"@types/node@npm:^18.0.6":
+  version: 18.0.6
+  resolution: "@types/node@npm:18.0.6"
+  checksum: 780f8885a6b6eb12f4c0246617747fdc37a451931b3c01ce8148d356c0903b705dcb16cc6a914de63d48b0dc1b002c7a3dfae681f580e1761aa551d3cd996813
   languageName: node
   linkType: hard
 
@@ -6920,9 +6932,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-jest@npm:^28.0.6":
-  version: 28.0.6
-  resolution: "ts-jest@npm:28.0.6"
+"ts-jest@npm:^28.0.7":
+  version: 28.0.7
+  resolution: "ts-jest@npm:28.0.7"
   dependencies:
     bs-logger: 0.x
     fast-json-stable-stringify: 2.x
@@ -6941,13 +6953,15 @@ __metadata:
   peerDependenciesMeta:
     "@babel/core":
       optional: true
+    "@jest/types":
+      optional: true
     babel-jest:
       optional: true
     esbuild:
       optional: true
   bin:
     ts-jest: cli.js
-  checksum: 76f3c7a5a81bc757eb38f4d3be7c255e4fc6107abd8da84134908c867b5a9505af1d8591c77115d719176a52856e4adf04278df384e0a113a7ce60fed8be1f41
+  checksum: be6ad6382e3b2e7b0c45d06616a4a02aeb6815bad2026fe8eeb4e0941205faa50ac3f5930adb7ba2fda5fea6a5739bfa507e2eac8764d2c729ddc8010681707a
   languageName: node
   linkType: hard
 
@@ -7032,9 +7046,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typedoc@npm:^0.23.7":
-  version: 0.23.7
-  resolution: "typedoc@npm:0.23.7"
+"typedoc@npm:^0.23.8":
+  version: 0.23.8
+  resolution: "typedoc@npm:0.23.8"
   dependencies:
     lunr: ^2.3.9
     marked: ^4.0.16
@@ -7044,7 +7058,7 @@ __metadata:
     typescript: 4.6.x || 4.7.x
   bin:
     typedoc: bin/typedoc
-  checksum: 70e4462602a989c51657111db8689947d7ac0e938b2edee1045b279808c56a6ffd2d42ed0f8080645e28bc8c84f82cb3faec54ea5cc5b5fd62d2fc4ea4548297
+  checksum: 99568e5df15781def0761d9876a86883bb58cb5318c258be965628626cc33737cd605640de2a9397f6722bccaed70aeb1e68c5f390b03ac7e8a17da9f091f906
   languageName: node
   linkType: hard
 
@@ -7238,11 +7252,11 @@ __metadata:
   dependencies:
     "@jest/types": ^28.1.3
     "@rushstack/eslint-patch": ^1.1.4
-    "@saberhq/eslint-config": ^2.0.2
-    "@saberhq/tsconfig": ^2.0.2
+    "@saberhq/eslint-config": ^2.0.3
+    "@saberhq/tsconfig": ^2.0.3
     "@types/eslint": ^8.4.5
     "@types/jest": ^28.1.6
-    "@types/node": ^18.0.5
+    "@types/node": ^18.0.6
     "@types/prettier": ^2.6.3
     "@typescript-eslint/utils": ^5.30.6
     "@yarnpkg/doctor": ^3.1.3
@@ -7253,8 +7267,8 @@ __metadata:
     lint-staged: ^13.0.3
     prettier: ^2.7.1
     swagger-typescript-api: ^9.3.1
-    ts-jest: ^28.0.6
-    typedoc: ^0.23.7
+    ts-jest: ^28.0.7
+    typedoc: ^0.23.8
     typescript: ^4.7.4
   languageName: unknown
   linkType: soft
