@@ -48,7 +48,7 @@ __metadata:
   resolution: "@aptosis/aptos-typed-api@workspace:packages/aptos-typed-api"
   dependencies:
     "@aptosis/aptos-api": "workspace:^"
-    "@movingco/move-types": ^0.1.55
+    "@movingco/move-types": ^0.1.57
     "@saberhq/tsconfig": ^2.0.3
     jsbi: ^4.3.0
     tslib: ^2.4.0
@@ -64,7 +64,7 @@ __metadata:
   dependencies:
     "@aptosis/aptos-api": "workspace:^"
     "@aptosis/aptos-client": "workspace:^"
-    "@movingco/core": ^0.1.56
+    "@movingco/core": ^0.1.58
     "@saberhq/tsconfig": ^2.0.3
     "@vespaiach/axios-fetch-adapter": ^0.3.0
     axios: ^0.27.2
@@ -859,11 +859,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@movingco/core@npm:^0.1.56":
-  version: 0.1.56
-  resolution: "@movingco/core@npm:0.1.56"
+"@movingco/core@npm:^0.1.58":
+  version: 0.1.58
+  resolution: "@movingco/core@npm:0.1.58"
   dependencies:
-    "@movingco/sha3": ^0.1.55
+    "@movingco/sha3": ^0.1.57
     "@saberhq/option-utils": ^1.13.32
     "@ubeswap/token-math": ^5.2.0
     buffer: ^6.0.3
@@ -871,28 +871,28 @@ __metadata:
     tslib: ^2.4.0
   peerDependencies:
     jsbi: ^4.3.0
-  checksum: 92323c5c73693df3e126782a378cc9985a9cd504a62f605683f7d9bbdb1e67af05a3916c8685a9aaa661f70de9429bfbb9f8da82c9408137f405238460a94676
+  checksum: 35e099e8407b1278ad2cd26a6a527b5616af923859dbad798739bf1483fd2d706f08f1140f9f136e19a6f46e4b4a20a3e35f500384895ad7a263ea02475cbbf0
   languageName: node
   linkType: hard
 
-"@movingco/move-types@npm:^0.1.55":
-  version: 0.1.55
-  resolution: "@movingco/move-types@npm:0.1.55"
+"@movingco/move-types@npm:^0.1.57":
+  version: 0.1.57
+  resolution: "@movingco/move-types@npm:0.1.57"
   dependencies:
     tiny-invariant: ^1.2.0
     tslib: ^2.4.0
-  checksum: 389246c2c9112c84e2e9338d0e71468842f8784e232ad55fe778d2f636295f32c81e24be5594d8bb06929eba196c2ec0d3fed1e14b1b33dc50334a803de5c20b
+  checksum: 6b1a83f584fca327c2081832d3c72b72da144477c1e1b21e5db0b15bd71762422870335e5a30a3750913782a153d1743078c8cada643e063ec2517bd28637a6a
   languageName: node
   linkType: hard
 
-"@movingco/sha3@npm:^0.1.55":
-  version: 0.1.55
-  resolution: "@movingco/sha3@npm:0.1.55"
+"@movingco/sha3@npm:^0.1.57":
+  version: 0.1.57
+  resolution: "@movingco/sha3@npm:0.1.57"
   dependencies:
     js-sha3: ^0.8.0
     tiny-invariant: ^1.2.0
     tslib: ^2.4.0
-  checksum: 849f141b311c123b2a7aa7644d1142d4f7a1249e571f6fc79a165b8be81c6af6465eab761d37727caec24c5c65c99c2cb79f0a45a9b22f4a90b6b256cad91a3e
+  checksum: c698eb48af1ff8990bccda11fe771027dc3819d8f2966d5d0a4448e99d27aed4e3fcb279a8d82ae079c3bb948eb8288bc9c62f8dfdc71d4efb5595f5556c78d7
   languageName: node
   linkType: hard
 
@@ -1357,6 +1357,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/scope-manager@npm:5.30.7":
+  version: 5.30.7
+  resolution: "@typescript-eslint/scope-manager@npm:5.30.7"
+  dependencies:
+    "@typescript-eslint/types": 5.30.7
+    "@typescript-eslint/visitor-keys": 5.30.7
+  checksum: 434ce7a13a8f3bffae2af2b7fe19bab6e490c78114584212519f50cd1b91fbdcddc8ad93bdb3cacdc8cecca5a8c5d2eb606557e66bd3fcd9d3040846846c22ff
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/type-utils@npm:5.30.6":
   version: 5.30.6
   resolution: "@typescript-eslint/type-utils@npm:5.30.6"
@@ -1380,6 +1390,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/types@npm:5.30.7":
+  version: 5.30.7
+  resolution: "@typescript-eslint/types@npm:5.30.7"
+  checksum: 2f6345bf0e2e9f392c1f62a5f96c630d4565574230a000508d923444229e51c1a05e07cef042935ca30f4f35755dbf3871b8b9da808911f578d63e6a4b897b79
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/typescript-estree@npm:5.30.6":
   version: 5.30.6
   resolution: "@typescript-eslint/typescript-estree@npm:5.30.6"
@@ -1398,7 +1415,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/utils@npm:5.30.6, @typescript-eslint/utils@npm:^5.30.6":
+"@typescript-eslint/typescript-estree@npm:5.30.7":
+  version: 5.30.7
+  resolution: "@typescript-eslint/typescript-estree@npm:5.30.7"
+  dependencies:
+    "@typescript-eslint/types": 5.30.7
+    "@typescript-eslint/visitor-keys": 5.30.7
+    debug: ^4.3.4
+    globby: ^11.1.0
+    is-glob: ^4.0.3
+    semver: ^7.3.7
+    tsutils: ^3.21.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 7cff83a9b9c91a89bcbb677d539b7122b2a423a66f575364858b4635d7e53a25b9329cd20a5adfb732758a41d1c6801d4bfa3eb798a192f351aafb11eedc58b6
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/utils@npm:5.30.6":
   version: 5.30.6
   resolution: "@typescript-eslint/utils@npm:5.30.6"
   dependencies:
@@ -1414,6 +1449,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/utils@npm:^5.30.7":
+  version: 5.30.7
+  resolution: "@typescript-eslint/utils@npm:5.30.7"
+  dependencies:
+    "@types/json-schema": ^7.0.9
+    "@typescript-eslint/scope-manager": 5.30.7
+    "@typescript-eslint/types": 5.30.7
+    "@typescript-eslint/typescript-estree": 5.30.7
+    eslint-scope: ^5.1.1
+    eslint-utils: ^3.0.0
+  peerDependencies:
+    eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
+  checksum: 77b0baf069f70290214294d74fdf7c46a7ddeab322ef53f65766b0c8e59f0e6f8074beb19233be34faca5beb390ac1b932dd1c983337355674c4437b4b1e2b44
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/visitor-keys@npm:5.30.6":
   version: 5.30.6
   resolution: "@typescript-eslint/visitor-keys@npm:5.30.6"
@@ -1421,6 +1472,16 @@ __metadata:
     "@typescript-eslint/types": 5.30.6
     eslint-visitor-keys: ^3.3.0
   checksum: e4ec0541d685d211274724c9f1887b6cdd03c7fc4fbdd1ea74c18311c3a5a9a2d4c676448ea714687ca13cc881ec5c73605de75fbf38f302ba8ea86d2b77897f
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/visitor-keys@npm:5.30.7":
+  version: 5.30.7
+  resolution: "@typescript-eslint/visitor-keys@npm:5.30.7"
+  dependencies:
+    "@typescript-eslint/types": 5.30.7
+    eslint-visitor-keys: ^3.3.0
+  checksum: f322972aeda3143d4c24826436357937131f7fbad102d48cfa6dfca70ac245f93b20cf7beb5f1809bda4fe8f454676a6cabf8f73e39af6724076f2b2c213ee80
   languageName: node
   linkType: hard
 
@@ -7258,7 +7319,7 @@ __metadata:
     "@types/jest": ^28.1.6
     "@types/node": ^18.0.6
     "@types/prettier": ^2.6.3
-    "@typescript-eslint/utils": ^5.30.6
+    "@typescript-eslint/utils": ^5.30.7
     "@yarnpkg/doctor": ^3.1.3
     eslint: ^8.20.0
     husky: ^8.0.1
