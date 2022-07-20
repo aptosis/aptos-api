@@ -8,7 +8,7 @@ export * from "@movingco/move-types";
 /**
  * {@inheritDoc "@aptosis/aptos-api".Account}
  */
-export interface Account extends Omit<api.Account, ByteStringHex> {
+export interface AccountMetadata extends Omit<api.Account, ByteStringHex> {
   /**
    * {@inheritDoc "@aptosis/aptos-api".Account#authentication_key}
    */
