@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@aptosis/aptos-api": "workspace:^",
-    "@movingco/move-types": "^0.1.57",
+    "@movingco/move-types": "^0.1.58",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
