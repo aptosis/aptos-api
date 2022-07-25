@@ -1,8 +1,8 @@
 import type { HexEncodedBytes } from "@aptosis/aptos-api";
 import type { AptosAPIResponse } from "@aptosis/aptos-client";
 import { raiseForStatus } from "@aptosis/aptos-client";
-import type { MaybeHexString } from "@movingco/core";
-import { HexString } from "@movingco/core";
+import type { MaybeHexString } from "@movingco/hexstring";
+import { HexString } from "@movingco/hexstring";
 import { default as fetchAdapter } from "@vespaiach/axios-fetch-adapter";
 import { default as axios } from "axios";
 
