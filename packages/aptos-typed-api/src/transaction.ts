@@ -48,12 +48,12 @@ export type TransactionType = keyof TransactionTypes;
 /**
  * A transaction.
  */
-export interface Transaction<
+export type Transaction<
   T extends TransactionType = TransactionType,
   TPayload extends TransactionPayloadType = TransactionPayloadType
-> extends TransactionTypes<TPayload> {
+> = TransactionTypes<TPayload>[T] & {
   readonly type: T;
-}
+};
 
 /**
  * A transaction made by a user.
