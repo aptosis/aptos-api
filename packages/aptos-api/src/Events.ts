@@ -9,7 +9,11 @@
  * ---------------------------------------------------------------
  */
 
-import { AptosError, Event, HexEncodedBytes } from "./data-contracts.js";
+import {
+  AptosError,
+  Event,
+  HexEncodedBytes,
+} from "@aptosis/aptos-data-contracts";
 import { HttpClient, RequestParams } from "./http-client.js";
 
 export class Events<SecurityDataType = unknown> {

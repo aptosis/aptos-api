@@ -23,7 +23,7 @@ import {
   GetEventsByEventHandleParams,
   MoveModule,
   OnChainTransaction,
-} from "./data-contracts.js";
+} from "@aptosis/aptos-data-contracts";
 import { HttpClient, RequestParams } from "./http-client.js";
 
 export class Accounts<SecurityDataType = unknown> {

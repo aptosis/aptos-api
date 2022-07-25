@@ -1,7 +1,7 @@
 {
-  "name": "@aptosis/aptos-api",
+  "name": "@aptosis/aptos-data-contracts",
   "version": "0.0.9",
-  "description": "Aptos API wrapper generated from the Swagger spec.",
+  "description": "Aptos API generated data types.",
   "author": "Ian Macalinao <ian@aptos.is>",
   "homepage": "https://github.com/aptosis/aptos-api#readme",
   "license": "Apache-2.0",
@@ -36,13 +36,8 @@
     "tslib": "^2.4.0"
   },
   "devDependencies": {
-    "@aptosis/aptos-data-contracts": "workspace:^",
     "@saberhq/tsconfig": "^2.0.3",
-    "axios": "^0.27.2",
     "typescript": "^4.7.4"
-  },
-  "peerDependencies": {
-    "axios": "^0.27"
   },
   "typedoc": {
     "readmeFile": "./README.md"

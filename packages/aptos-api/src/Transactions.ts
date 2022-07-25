@@ -18,7 +18,7 @@ import {
   SubmitTransactionRequest,
   Transaction,
   UserCreateSigningMessageRequest,
-} from "./data-contracts.js";
+} from "@aptosis/aptos-data-contracts";
 import { ContentType, HttpClient, RequestParams } from "./http-client.js";
 
 export class Transactions<SecurityDataType = unknown> {
