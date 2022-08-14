@@ -31,13 +31,12 @@
 <ul>
 <li><code>vector&lt;u8&gt;</code></li>
 <li><code>vector&lt;vector&lt;u64&gt;&gt;</code></li>
-<li><code>vector&lt;0x1::AptosAccount::Balance&lt;0x1::XDX::XDX&gt;&gt;</code></li>
+<li><code>vector&lt;0x1::coin::CoinStore&lt;0x1::aptos_coin::AptosCoin&gt;&gt;</code></li>
 </ul>
 <p>Struct type value examples:</p>
 <ul>
-<li><code>0x1::Aptos::Aptos&lt;0x1::XDX::XDX&gt;</code></li>
-<li><code>0x1::Abc::Abc&lt;vector&lt;u8&gt;, vector&lt;u64&gt;&gt;</code></li>
-<li><code>0x1::AptosAccount::AccountOperationsCapability</code></li>
+<li>`0x1::coin::CoinStore&lt;0x1::aptos_coin::AptosCoin&gt;</li>
+<li><code>0x1::account::Account</code></li>
 </ul>
 <p>Note:</p>
 <ol>
@@ -47,11 +46,11 @@
 
 <h3>Pattern</h3><p>^(bool|u8|u64|u128|address|signer|vector&lt;.+&gt;|0x[0-9a-zA-Z:_&lt;, &gt;]+)$</p>
 
-<h3>Example</h3><pre><code class="language-ts"><span class="hl-5">0x1</span><span class="hl-1">::</span><span class="hl-7">XUS</span><span class="hl-1">::</span><span class="hl-6">XUS</span>
+<h3>Example</h3><pre><code class="language-ts"><span class="hl-5">0x1</span><span class="hl-1">::</span><span class="hl-7">aptos_coin</span><span class="hl-1">::</span><span class="hl-0">AptosCoin</span>
 </code></pre>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/aptosis/aptos-api/blob/83f1e55/packages/aptos-data-contracts/src/index.ts#L193">packages/aptos-data-contracts/src/index.ts:193</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/aptosis/aptos-api/blob/f256c2f/packages/aptos-data-contracts/src/index.ts#L191">packages/aptos-data-contracts/src/index.ts:191</a></li></ul></aside></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
 <details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
@@ -72,11 +71,11 @@
 <ul>
 <li class="current"><a href="../modules.html">Aptos <wbr/>Type<wbr/>Script API <wbr/>Wrapper</a>
 <ul>
-<li class="tsd-kind-module"><a href="../modules/_aptosis_aptos_api.html">@aptosis/aptos-<wbr/>api -<wbr/> v0.0.11</a></li>
-<li class="tsd-kind-module"><a href="../modules/_aptosis_aptos_client.html">@aptosis/aptos-<wbr/>client -<wbr/> v0.0.11</a></li>
-<li class="current tsd-kind-module"><a href="../modules/_aptosis_aptos_data_contracts.html">@aptosis/aptos-<wbr/>data-<wbr/>contracts -<wbr/> v0.0.11</a></li>
-<li class="tsd-kind-module"><a href="../modules/_aptosis_aptos_typed_api.html">@aptosis/aptos-<wbr/>typed-<wbr/>api -<wbr/> v0.0.11</a></li>
-<li class="tsd-kind-module"><a href="../modules/_aptosis_faucet_client.html">@aptosis/faucet-<wbr/>client -<wbr/> v0.0.11</a></li></ul></li></ul></div></details></nav>
+<li class="tsd-kind-module"><a href="../modules/_aptosis_aptos_api.html">@aptosis/aptos-<wbr/>api -<wbr/> v0.1.0</a></li>
+<li class="tsd-kind-module"><a href="../modules/_aptosis_aptos_client.html">@aptosis/aptos-<wbr/>client -<wbr/> v0.1.0</a></li>
+<li class="current tsd-kind-module"><a href="../modules/_aptosis_aptos_data_contracts.html">@aptosis/aptos-<wbr/>data-<wbr/>contracts -<wbr/> v0.1.0</a></li>
+<li class="tsd-kind-module"><a href="../modules/_aptosis_aptos_typed_api.html">@aptosis/aptos-<wbr/>typed-<wbr/>api -<wbr/> v0.1.0</a></li>
+<li class="tsd-kind-module"><a href="../modules/_aptosis_faucet_client.html">@aptosis/faucet-<wbr/>client -<wbr/> v0.1.0</a></li></ul></li></ul></div></details></nav>
 <nav class="tsd-navigation secondary menu-sticky">
 <ul>
 <li class="tsd-kind-enum tsd-parent-kind-module"><a href="../enums/_aptosis_aptos_data_contracts.MoveAbility.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-enum)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-8-path"></rect><path d="M9.45 16V7.24H14.49V8.224H10.518V10.936H14.07V11.908H10.518V15.016H14.49V16H9.45Z" fill="var(--color-text)" id="icon-8-text"></path></svg>Move<wbr/>Ability</a></li>
@@ -114,6 +113,7 @@
 <li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_aptosis_aptos_data_contracts.TableItemRequest.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Table<wbr/>Item<wbr/>Request</a></li>
 <li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_aptosis_aptos_data_contracts.Token.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Token</a></li>
 <li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_aptosis_aptos_data_contracts.TokenData.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Token<wbr/>Data</a></li>
+<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_aptosis_aptos_data_contracts.TokenDataId.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Token<wbr/>Data<wbr/>Id</a></li>
 <li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_aptosis_aptos_data_contracts.TokenId.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Token<wbr/>Id</a></li>
 <li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_aptosis_aptos_data_contracts.UserTransactionRequest.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>User<wbr/>Transaction<wbr/>Request</a></li>
 <li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_aptosis_aptos_data_contracts.UserTransactionSignature.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>User<wbr/>Transaction<wbr/>Signature</a></li>
