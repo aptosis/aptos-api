@@ -3,10 +3,8 @@
   "extends": "@saberhq/tsconfig/tsconfig.root.json",
   "include": ["packages/**/*.spec.ts", "jest.config.mjs", ".eslintrc.cjs"],
   "references": [
-    { "path": "packages/aptos-data-contracts/" },
-    { "path": "packages/aptos-data-contracts/tsconfig.cjs.json" },
-    { "path": "packages/aptos-api/" },
-    { "path": "packages/aptos-api/tsconfig.cjs.json" },
+    { "path": "packages/aptos-api-raw/" },
+    { "path": "packages/aptos-api-raw/tsconfig.cjs.json" },
     { "path": "packages/aptos-client/" },
     { "path": "packages/aptos-client/tsconfig.cjs.json" },
     { "path": "packages/aptos-typed-api/" },

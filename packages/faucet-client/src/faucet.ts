@@ -1,4 +1,4 @@
-import type { HexEncodedBytes } from "@aptosis/aptos-api";
+import type { HexEncodedBytes } from "@aptosis/aptos-api-raw";
 import type { AptosAPIResponse } from "@aptosis/aptos-client";
 import { raiseForStatus } from "@aptosis/aptos-client";
 import type { MaybeHexString } from "@movingco/hexstring";

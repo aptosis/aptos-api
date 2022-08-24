@@ -1,20 +1,15 @@
 #!/usr/bin/env -S bash -xe
 
+shopt -s globstar
+
 rm -fr fixtures/
 mkdir -p fixtures/
-curl https://raw.githubusercontent.com/aptos-labs/aptos-core/devnet/api/doc/v0/openapi.yaml >fixtures/openapi.yaml
+curl https://raw.githubusercontent.com/aptos-labs/aptos-core/devnet/api/doc/spec.yaml >fixtures/openapi.yaml
 
-yarn swagger-typescript-api -p fixtures/openapi.yaml \
-    --modular --axios --single-http-client --extract-request-params --extract-request-body --responses \
-    -o packages/aptos-api/src/
-
-rm -f packages/aptos-data-contracts/src/*
-mv packages/aptos-api/src/data-contracts.ts packages/aptos-data-contracts/src/index.ts
-
-sed -i 's/http-client"/http-client.js"/g' packages/aptos-api/src/*
-sed -i 's|"./data-contracts"|"@aptosis/aptos-data-contracts"|g' packages/aptos-api/src/*
-sed -i 's/import axios, {/import { default as axios,/g' packages/aptos-api/src/*
+rm -fr packages/aptos-api/src
+yarn openapi -i fixtures/openapi.yaml -o packages/aptos-api/src/ -c axios --name AptosGeneratedClient --exportSchemas true
+sed -i 's|from '\''\.\([[:alnum:]_/\.\-\$]*\)*'\'';|from '\''.\1.js'\'';|g' packages/aptos-api/src/**/*.ts
+sed -i 's/import axios from/import { default as axios } from/g' packages/aptos-api/src/**/*.ts
 
 yarn prettier --write fixtures/openapi.yaml
-yarn prettier --write packages/aptos-api/src/*.ts
-yarn prettier --write packages/aptos-data-contracts/src/*.ts
+yarn prettier --write packages/aptos-api/src/**/*.ts

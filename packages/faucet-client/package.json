@@ -33,14 +33,14 @@
     "url": "https://github.com/aptosis/aptos-api/issues"
   },
   "dependencies": {
-    "@aptosis/aptos-api": "workspace:^",
+    "@aptosis/aptos-api-raw": "workspace:^",
     "@aptosis/aptos-client": "workspace:^",
     "@movingco/hexstring": "^0.4.0",
     "@vespaiach/axios-fetch-adapter": "^0.3.0",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
-    "@saberhq/tsconfig": "^2.0.3",
+    "@saberhq/tsconfig": "^2.0.4",
     "axios": "^0.27.2",
     "jsbi": "^4.3.0",
     "typescript": "^4.7.4"
