@@ -1,5 +1,5 @@
 export const APTOS_DEVNET_FULL_NODE_URL =
-  "https://fullnode.devnet.aptoslabs.com/";
+  "https://fullnode.devnet.aptoslabs.com/v1";
 
 /**
  * Aptos network configuration.
