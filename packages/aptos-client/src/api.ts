@@ -1,44 +1,26 @@
-import { Accounts, HttpClient, Transactions } from "@aptosis/aptos-api";
-import { default as fetchAdapter } from "@vespaiach/axios-fetch-adapter";
-import type { AxiosRequestConfig } from "axios";
-
-export type APIClientConfig = Omit<
-  AxiosRequestConfig,
-  "data" | "cancelToken" | "method"
->;
-
-/**
- * Creates a new HTTP client.
- * @param nodeUrl
- * @param config
- * @returns
- */
-export const createHttpClient = (
-  nodeUrl: string,
-  config: APIClientConfig = {}
-): HttpClient =>
-  new HttpClient({
-    withCredentials: false,
-    baseURL: nodeUrl,
-    validateStatus: () => true, // Don't explode here on error responses; let our code handle it
-    adapter: typeof fetch !== "undefined" ? fetchAdapter : undefined,
-    ...config,
-  });
+import type {
+  AccountsService,
+  OpenAPIConfig,
+  TransactionsService,
+} from "@aptosis/aptos-api-raw";
+import { AptosGeneratedClient } from "@aptosis/aptos-api-raw";
 
 /**
  * Lightweight alternative wrapper to the official Aptos client.
  */
 export class AptosAPI {
-  readonly client: HttpClient;
+  readonly client: AptosGeneratedClient;
 
-  readonly accounts: Accounts;
-  readonly transactions: Transactions;
-
-  constructor(readonly nodeUrl: string, config: APIClientConfig = {}) {
+  constructor(readonly nodeUrl: string, config: Partial<OpenAPIConfig> = {}) {
     // `withCredentials` ensures cookie handling
-    this.client = createHttpClient(nodeUrl, config);
+    this.client = new AptosGeneratedClient({ ...config, BASE: nodeUrl });
+  }
 
-    this.accounts = new Accounts(this.client);
-    this.transactions = new Transactions(this.client);
+  get accounts(): AccountsService {
+    return this.client.accounts;
+  }
+
+  get transactions(): TransactionsService {
+    return this.client.transactions;
   }
 }

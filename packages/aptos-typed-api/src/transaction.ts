@@ -1,34 +1,9 @@
-import type * as api from "@aptosis/aptos-api";
+import type * as api from "@aptosis/aptos-api-raw";
 
 import type {
   TransactionPayload,
   TransactionPayloadType,
 } from "./tx_payload.js";
-
-export type { UserTransactionSignature } from "@aptosis/aptos-api";
-
-/**
- * {@inheritDoc "@aptosis/aptos-api".UserTransactionRequest}
- */
-export interface UserTransactionRequest<
-  TType extends TransactionPayloadType = TransactionPayloadType
-> extends Omit<api.UserTransactionRequest, "payload"> {
-  /**
-   * Transaction payload type.
-   */
-  readonly payload: TransactionPayload<TType>;
-}
-
-/**
- * {@inheritDoc "@aptosis/aptos-api".UserCreateSigningMessageRequest}
- */
-export interface UserCreateSigningMessageRequest<
-  TType extends TransactionPayloadType = TransactionPayloadType
-> extends UserTransactionRequest<TType>,
-    Omit<
-      api.UserCreateSigningMessageRequest,
-      keyof api.UserTransactionRequest
-    > {}
 
 type TransactionTypes<
   TPayload extends TransactionPayloadType = TransactionPayloadType
@@ -59,26 +34,34 @@ export type Transaction<
  * A transaction made by a user.
  */
 export interface PendingTransaction<
-  TPayload extends TransactionPayloadType = TransactionPayloadType
-> extends Omit<api.PendingTransaction, keyof UserTransactionRequest<TPayload>>,
-    UserTransactionRequest<TPayload> {
-  readonly type: "pending_transaction";
+  TType extends TransactionPayloadType = TransactionPayloadType
+> extends Omit<api.PendingTransaction, "payload"> {
+  /**
+   * Transaction payload type.
+   */
+  readonly payload: TransactionPayload<TType>;
 }
 
 /**
  * A transaction made by a user.
  */
 export interface UserTransaction<
-  TPayload extends TransactionPayloadType = TransactionPayloadType
-> extends Omit<api.UserTransaction, keyof UserTransactionRequest<TPayload>>,
-    UserTransactionRequest<TPayload> {
-  readonly type: "user_transaction";
+  TType extends TransactionPayloadType = TransactionPayloadType
+> extends Omit<api.UserTransaction, "payload"> {
+  /**
+   * Transaction payload type.
+   */
+  readonly payload: TransactionPayload<TType>;
 }
 
 /**
- * {@inheritDoc "@aptosis/aptos-api".SubmitTransactionRequest}
+ * {@inheritDoc "@aptosis/aptos-api-raw".SubmitTransactionRequest}
  */
 export interface SubmitTransactionRequest<
   TType extends TransactionPayloadType = TransactionPayloadType
-> extends UserTransactionRequest<TType>,
-    Omit<api.SubmitTransactionRequest, keyof UserTransactionRequest<TType>> {}
+> extends Omit<api.SubmitTransactionRequest, "payload"> {
+  /**
+   * Transaction payload type.
+   */
+  readonly payload: TransactionPayload<TType>;
+}

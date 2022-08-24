@@ -33,7 +33,7 @@
     "url": "https://github.com/aptosis/aptos-api/issues"
   },
   "dependencies": {
-    "@aptosis/aptos-api": "workspace:^",
+    "@aptosis/aptos-api-raw": "workspace:^",
     "@movingco/move-types": "^0.4.0",
     "tslib": "^2.4.0"
   },

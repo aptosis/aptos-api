@@ -1,4 +1,4 @@
-import type { AptosError } from "@aptosis/aptos-api";
+import type { AptosError } from "@aptosis/aptos-api-raw";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 
 export type AptosAPIResponse<T> = AxiosResponse<T, AptosError>;

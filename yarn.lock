@@ -15,13 +15,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aptosis/aptos-api@workspace:^, @aptosis/aptos-api@workspace:packages/aptos-api":
-  version: 0.0.0-use.local
-  resolution: "@aptosis/aptos-api@workspace:packages/aptos-api"
+"@apidevtools/json-schema-ref-parser@npm:9.0.9":
+  version: 9.0.9
+  resolution: "@apidevtools/json-schema-ref-parser@npm:9.0.9"
   dependencies:
-    "@aptosis/aptos-data-contracts": "workspace:^"
+    "@jsdevtools/ono": ^7.1.3
+    "@types/json-schema": ^7.0.6
+    call-me-maybe: ^1.0.1
+    js-yaml: ^4.1.0
+  checksum: b21f6bdd37d2942c3967ee77569bc74fadd1b922f688daf5ef85057789a2c3a7f4afc473aa2f3a93ec950dabb6ef365f8bd9cf51e4e062a1ee1e59b989f8f9b4
+  languageName: node
+  linkType: hard
+
+"@aptosis/aptos-api-raw@workspace:^, @aptosis/aptos-api-raw@workspace:packages/aptos-api-raw":
+  version: 0.0.0-use.local
+  resolution: "@aptosis/aptos-api-raw@workspace:packages/aptos-api-raw"
+  dependencies:
     "@saberhq/tsconfig": ^2.0.4
     axios: ^0.27.2
+    form-data: ^4.0.0
     tslib: ^2.4.0
     typescript: ^4.7.4
   peerDependencies:
@@ -33,9 +45,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@aptosis/aptos-client@workspace:packages/aptos-client"
   dependencies:
-    "@aptosis/aptos-api": "workspace:^"
+    "@aptosis/aptos-api-raw": "workspace:^"
     "@saberhq/tsconfig": ^2.0.4
-    "@vespaiach/axios-fetch-adapter": ^0.3.0
     axios: ^0.27.2
     tslib: ^2.4.0
     typescript: ^4.7.4
@@ -44,21 +55,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@aptosis/aptos-data-contracts@workspace:^, @aptosis/aptos-data-contracts@workspace:packages/aptos-data-contracts":
-  version: 0.0.0-use.local
-  resolution: "@aptosis/aptos-data-contracts@workspace:packages/aptos-data-contracts"
-  dependencies:
-    "@saberhq/tsconfig": ^2.0.4
-    tslib: ^2.4.0
-    typescript: ^4.7.4
-  languageName: unknown
-  linkType: soft
-
 "@aptosis/aptos-typed-api@workspace:packages/aptos-typed-api":
   version: 0.0.0-use.local
   resolution: "@aptosis/aptos-typed-api@workspace:packages/aptos-typed-api"
   dependencies:
-    "@aptosis/aptos-api": "workspace:^"
+    "@aptosis/aptos-api-raw": "workspace:^"
     "@movingco/move-types": ^0.4.0
     "@saberhq/tsconfig": ^2.0.4
     jsbi: ^4.3.0
@@ -73,7 +74,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@aptosis/faucet-client@workspace:packages/faucet-client"
   dependencies:
-    "@aptosis/aptos-api": "workspace:^"
+    "@aptosis/aptos-api-raw": "workspace:^"
     "@aptosis/aptos-client": "workspace:^"
     "@movingco/hexstring": ^0.4.0
     "@saberhq/tsconfig": ^2.0.4
@@ -877,6 +878,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jsdevtools/ono@npm:^7.1.3":
+  version: 7.1.3
+  resolution: "@jsdevtools/ono@npm:7.1.3"
+  checksum: 2297fcd472ba810bffe8519d2249171132844c7174f3a16634f9260761c8c78bc0428a4190b5b6d72d45673c13918ab9844d706c3ed4ef8f62ab11a2627a08ad
+  languageName: node
+  linkType: hard
+
 "@movingco/bytes-to-hex@npm:^0.4.0":
   version: 0.4.0
   resolution: "@movingco/bytes-to-hex@npm:0.4.0"
@@ -1177,7 +1185,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.9":
+"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.6, @types/json-schema@npm:^7.0.9":
   version: 7.0.11
   resolution: "@types/json-schema@npm:7.0.11"
   checksum: 527bddfe62db9012fccd7627794bd4c71beb77601861055d87e3ee464f2217c85fca7a4b56ae677478367bbd248dbde13553312b7d4dbc702a2f2bbf60c4018d
@@ -2389,7 +2397,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"camelcase@npm:^6.2.0":
+"camelcase@npm:^6.2.0, camelcase@npm:^6.3.0":
   version: 6.3.0
   resolution: "camelcase@npm:6.3.0"
   checksum: 8c96818a9076434998511251dcb2761a94817ea17dbdc37f47ac080bd088fc62c7369429a19e2178b993497132c8cbcf5cc1f44ba963e76782ba469c0474938d
@@ -3527,6 +3535,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fs-extra@npm:^10.1.0":
+  version: 10.1.0
+  resolution: "fs-extra@npm:10.1.0"
+  dependencies:
+    graceful-fs: ^4.2.0
+    jsonfile: ^6.0.1
+    universalify: ^2.0.0
+  checksum: dc94ab37096f813cc3ca12f0f1b5ad6744dfed9ed21e953d72530d103cea193c2f81584a39e9dee1bea36de5ee66805678c0dddc048e8af1427ac19c00fffc50
+  languageName: node
+  linkType: hard
+
 "fs-minipass@npm:^2.0.0, fs-minipass@npm:^2.1.0":
   version: 2.1.0
   resolution: "fs-minipass@npm:2.1.0"
@@ -3782,7 +3801,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graceful-fs@npm:^4.2.6, graceful-fs@npm:^4.2.9":
+"graceful-fs@npm:^4.1.6, graceful-fs@npm:^4.2.0, graceful-fs@npm:^4.2.6, graceful-fs@npm:^4.2.9":
   version: 4.2.10
   resolution: "graceful-fs@npm:4.2.10"
   checksum: 3f109d70ae123951905d85032ebeae3c2a5a7a997430df00ea30df0e3a6c60cf6689b109654d6fdacd28810a053348c4d14642da1d075049e6be1ba5216218da
@@ -3793,6 +3812,24 @@ __metadata:
   version: 1.0.4
   resolution: "grapheme-splitter@npm:1.0.4"
   checksum: 0c22ec54dee1b05cd480f78cf14f732cb5b108edc073572c4ec205df4cd63f30f8db8025afc5debc8835a8ddeacf648a1c7992fe3dcd6ad38f9a476d84906620
+  languageName: node
+  linkType: hard
+
+"handlebars@npm:^4.7.7":
+  version: 4.7.7
+  resolution: "handlebars@npm:4.7.7"
+  dependencies:
+    minimist: ^1.2.5
+    neo-async: ^2.6.0
+    source-map: ^0.6.1
+    uglify-js: ^3.1.4
+    wordwrap: ^1.0.0
+  dependenciesMeta:
+    uglify-js:
+      optional: true
+  bin:
+    handlebars: bin/handlebars
+  checksum: 1e79a43f5e18d15742977cb987923eab3e2a8f44f2d9d340982bcb69e1735ed049226e534d7c1074eaddaf37e4fb4f471a8adb71cddd5bc8cf3f894241df5cee
   languageName: node
   linkType: hard
 
@@ -4829,6 +4866,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-schema-ref-parser@npm:^9.0.9":
+  version: 9.0.9
+  resolution: "json-schema-ref-parser@npm:9.0.9"
+  dependencies:
+    "@apidevtools/json-schema-ref-parser": 9.0.9
+  checksum: e05166a84c702f54f192edb2eb2e39236c3b03c30561777d63fd156ecd3aa3d2fffc0806a5703384bfba3c78800b1dc05f8da1ea25e6470b35a823210f7d48c4
+  languageName: node
+  linkType: hard
+
 "json-schema-traverse@npm:^0.4.1":
   version: 0.4.1
   resolution: "json-schema-traverse@npm:0.4.1"
@@ -4867,6 +4913,19 @@ __metadata:
   version: 3.0.0
   resolution: "jsonc-parser@npm:3.0.0"
   checksum: 1df2326f1f9688de30c70ff19c5b2a83ba3b89a1036160da79821d1361090775e9db502dc57a67c11b56e1186fc1ed70b887f25c5febf9a3ec4f91435836c99d
+  languageName: node
+  linkType: hard
+
+"jsonfile@npm:^6.0.1":
+  version: 6.1.0
+  resolution: "jsonfile@npm:6.1.0"
+  dependencies:
+    graceful-fs: ^4.1.6
+    universalify: ^2.0.0
+  dependenciesMeta:
+    graceful-fs:
+      optional: true
+  checksum: 7af3b8e1ac8fe7f1eccc6263c6ca14e1966fcbc74b618d3c78a0a2075579487547b94f72b7a1114e844a1e15bb00d440e5d1720bfc4612d790a6f285d5ea8354
   languageName: node
   linkType: hard
 
@@ -5213,7 +5272,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimist@npm:^1.2.0, minimist@npm:^1.2.6":
+"minimist@npm:^1.2.0, minimist@npm:^1.2.5, minimist@npm:^1.2.6":
   version: 1.2.6
   resolution: "minimist@npm:1.2.6"
   checksum: d15428cd1e11eb14e1233bcfb88ae07ed7a147de251441d61158619dfb32c4d7e9061d09cab4825fdee18ecd6fce323228c8c47b5ba7cd20af378ca4048fb3fb
@@ -5358,6 +5417,13 @@ __metadata:
   version: 0.6.3
   resolution: "negotiator@npm:0.6.3"
   checksum: b8ffeb1e262eff7968fc90a2b6767b04cfd9842582a9d0ece0af7049537266e7b2506dfb1d107a32f06dd849ab2aea834d5830f7f4d0e5cb7d36e1ae55d021d9
+  languageName: node
+  linkType: hard
+
+"neo-async@npm:^2.6.0":
+  version: 2.6.2
+  resolution: "neo-async@npm:2.6.2"
+  checksum: deac9f8d00eda7b2e5cd1b2549e26e10a0faa70adaa6fdadca701cc55f49ee9018e427f424bac0c790b7c7e2d3068db97f3093f1093975f2acb8f8818b936ed9
   languageName: node
   linkType: hard
 
@@ -5636,6 +5702,21 @@ __metadata:
   dependencies:
     mimic-fn: ^4.0.0
   checksum: 0846ce78e440841335d4e9182ef69d5762e9f38aa7499b19f42ea1c4cd40f0b4446094c455c713f9adac3f4ae86f613bb5e30c99e52652764d06a89f709b3788
+  languageName: node
+  linkType: hard
+
+"openapi-typescript-codegen@npm:^0.23.0":
+  version: 0.23.0
+  resolution: "openapi-typescript-codegen@npm:0.23.0"
+  dependencies:
+    camelcase: ^6.3.0
+    commander: ^9.3.0
+    fs-extra: ^10.1.0
+    handlebars: ^4.7.7
+    json-schema-ref-parser: ^9.0.9
+  bin:
+    openapi: bin/index.js
+  checksum: e464e12c60da64b1f20b15c2a66490ef762624069e67da1fa85c26bd9aba855afb8fd47ab8291c445797070821eb53a9a40803863da11ea10a03c9e359f53f41
   languageName: node
   linkType: hard
 
@@ -7079,6 +7160,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"uglify-js@npm:^3.1.4":
+  version: 3.17.0
+  resolution: "uglify-js@npm:3.17.0"
+  bin:
+    uglifyjs: bin/uglifyjs
+  checksum: 20d1fcac05e74db949a9579a36f9a1af88430e590bc9c22410b76686035c55cef65247ca1935d2f6440c78928227684219c8b1ddfcd858213049cb2890821392
+  languageName: node
+  linkType: hard
+
 "unbox-primitive@npm:^1.0.2":
   version: 1.0.2
   resolution: "unbox-primitive@npm:1.0.2"
@@ -7106,6 +7196,13 @@ __metadata:
   dependencies:
     imurmurhash: ^0.1.4
   checksum: 5b6876a645da08d505dedb970d1571f6cebdf87044cb6b740c8dbb24f0d6e1dc8bdbf46825fd09f994d7cf50760e6f6e063cfa197d51c5902c00a861702eb75a
+  languageName: node
+  linkType: hard
+
+"universalify@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "universalify@npm:2.0.0"
+  checksum: 2406a4edf4a8830aa6813278bab1f953a8e40f2f63a37873ffa9a3bc8f9745d06cc8e88f3572cb899b7e509013f7f6fcc3e37e8a6d914167a5381d8440518c44
   languageName: node
   linkType: hard
 
@@ -7223,6 +7320,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"wordwrap@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "wordwrap@npm:1.0.0"
+  checksum: 2a44b2788165d0a3de71fd517d4880a8e20ea3a82c080ce46e294f0b68b69a2e49cff5f99c600e275c698a90d12c5ea32aff06c311f0db2eb3f1201f3e7b2a04
+  languageName: node
+  linkType: hard
+
 "workspace@workspace:.":
   version: 0.0.0-use.local
   resolution: "workspace@workspace:."
@@ -7238,10 +7342,12 @@ __metadata:
     "@typescript-eslint/utils": ^5.34.0
     "@yarnpkg/doctor": ^3.1.3
     eslint: ^8.22.0
+    form-data: ^4.0.0
     husky: ^8.0.1
     jest: ^28.1.3
     jest-runtime: ^28.1.3
     lint-staged: ^13.0.3
+    openapi-typescript-codegen: ^0.23.0
     prettier: ^2.7.1
     swagger-typescript-api: ^10.0.1
     ts-jest: ^28.0.8

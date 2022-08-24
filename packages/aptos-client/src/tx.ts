@@ -1,8 +1,11 @@
-import type { HexEncodedBytes, Transaction } from "@aptosis/aptos-api";
+import type {
+  HashValue,
+  HexEncodedBytes,
+  Transaction,
+} from "@aptosis/aptos-api-raw";
+import { ApiError } from "@aptosis/aptos-api-raw";
 
 import type { AptosAPI } from "./api.js";
-import type { AptosAPIResponse } from "./error.js";
-import { raiseForStatus } from "./error.js";
 
 /**
  * Blocks for the given duration.
@@ -22,14 +25,18 @@ export const sleep = (duration: number): Promise<void> => {
  */
 export const fetchTransaction = async (
   aptos: AptosAPI,
-  txnHash: HexEncodedBytes
+  txnHash: HashValue
 ): Promise<Transaction | null> => {
-  const response = await aptos.transactions.getTransaction(txnHash);
-  if (response.status === 404) {
-    return null;
+  try {
+    return await aptos.transactions.getTransactionByHash(txnHash);
+  } catch (e) {
+    if (e instanceof ApiError) {
+      if (e.status === 404) {
+        return null;
+      }
+    }
+    throw e;
   }
-  raiseForStatus(200, response as AptosAPIResponse<Transaction>, txnHash);
-  return response.data;
 };
 
 /**

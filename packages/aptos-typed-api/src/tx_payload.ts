@@ -1,4 +1,4 @@
-import type * as api from "@aptosis/aptos-api";
+import type * as api from "@aptosis/aptos-api-raw";
 import type { ScriptFunctionPayload } from "@movingco/move-types";
 
 /**
@@ -11,7 +11,7 @@ export type TransactionPayloadType =
   | "script_payload";
 
 /**
- * {@inheritDoc "@aptosis/aptos-api".TransactionPayload}
+ * {@inheritDoc "@aptosis/aptos-api-raw".TransactionPayload}
  */
 export type TransactionPayload<
   T extends TransactionPayloadType = TransactionPayloadType
