@@ -11,8 +11,8 @@
 
 import {
   AptosError,
-  Event,
-  HexEncodedBytes,
+  GetEventsByEventKeyParams,
+  VersionedEvent,
 } from "@aptosis/aptos-data-contracts";
 import { HttpClient, RequestParams } from "./http-client.js";
 
@@ -24,24 +24,25 @@ export class Events<SecurityDataType = unknown> {
   }
 
   /**
-   * No description
+   * @description This endpoint allows you to get a list of events of a specific type as identified by its event key, which is a globally unique ID.
    *
-   * @tags events
+   * @tags Events
    * @name GetEventsByEventKey
    * @summary Get events by event key
    * @request GET:/events/{event_key}
-   * @response `200` `(Event)[]` Returns events
-   * @response `400` `(AptosError)`
-   * @response `404` `(AptosError)`
-   * @response `500` `(AptosError)`
+   * @response `200` `(VersionedEvent)[]`
+   * @response `400` `AptosError`
+   * @response `404` `AptosError`
+   * @response `500` `AptosError`
    */
   getEventsByEventKey = (
-    eventKey: HexEncodedBytes,
+    { eventKey, ...query }: GetEventsByEventKeyParams,
     params: RequestParams = {}
   ) =>
-    this.http.request<Event[], AptosError>({
+    this.http.request<VersionedEvent[], AptosError>({
       path: `/events/${eventKey}`,
       method: "GET",
+      query: query,
       format: "json",
       ...params,
     });

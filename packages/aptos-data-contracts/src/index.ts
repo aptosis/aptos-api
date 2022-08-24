@@ -9,228 +9,662 @@
  * ---------------------------------------------------------------
  */
 
-export interface AptosError {
-  code: number;
-  message: string;
-
+export interface AccountData {
   /**
-   * The version of the latest transaction in the ledger.
+   * A string containing a 64-bit unsigned integer.
    *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
    */
-  aptos_ledger_version?: LedgerVersion;
-}
-
-/**
- * Unsigned int64 type value
- * @format uint64
- * @example 32425224034
- */
-export type Uint64 = string;
-
-/**
-* Hex-encoded 16 bytes Aptos account address.
-
-Prefixed with `0x` and leading zeros are trimmed.
-
-See [doc](https://diem.github.io/move/address.html) for more details.
-* @format address
-* @example 0xdd
-*/
-export type Address = string;
-
-/**
-* All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-two hex digits per byte.
-
-Different with `Address` type, hex-encoded bytes should not trim any zeros.
-* @format hex
-* @example 0x88fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1
-*/
-export type HexEncodedBytes = string;
-
-/**
- * Timestamp in seconds, e.g. transaction expiration timestamp.
- * @format uint64
- * @example 1635447454
- */
-export type TimestampSec = string;
-
-/**
- * Timestamp in microseconds, e.g. ledger / block creation timestamp.
- * @format uint64
- * @example 1632507671675208
- */
-export type TimestampUsec = string;
-
-/**
- * The version of the latest transaction in the ledger.
- * @format uint64
- * @example 52635485
- */
-export type LedgerVersion = string;
-
-/**
-* Event key is a global index for an event stream.
-
-It is hex-encoded BCS bytes of `EventHandle` `guid` field value, which is
-a combination of a `uint64` creation number and account address
-(without trimming leading zeros).
-
-For example, event key `0x00000000000000000000000000000000000000000a550c18`
-is combined by the following 2 parts:
-  1. `0000000000000000`: `uint64` representation of `0`.
-  2. `0000000000000000000000000a550c18`: 16 bytes of account address.
-* @format hex
-* @example 0x00000000000000000000000000000000000000000a550c18
-*/
-export type EventKey = string;
-
-/**
-* Event `sequence_number` is unique id of an event in an event stream.
-Event `sequence_number` starts from 0 for each event key.
-* @format uint64
-* @example 23
-*/
-export type EventSequenceNumber = string;
-
-export interface LedgerInfo {
-  /**
-   * The blockchain chain id.
-   *
-   * @example 4
-   */
-  chain_id: number;
+  sequence_number: U64;
 
   /**
-   * The version of the latest transaction in the ledger.
-   *
-   */
-  ledger_version: LedgerVersion;
-
-  /**
-   * Timestamp in microseconds, e.g. ledger / block creation timestamp.
-   *
-   */
-  ledger_timestamp: TimestampUsec;
-}
-
-/**
- * Core account resource, used for identifying account and transaction execution.
- * @example {"sequence_number":"1","authentication_key":"0x5307b5f4bc67829097a8ba9b43dba3b88261eeccd1f709d9bde240fc100fbb69"}
- */
-export interface Account {
-  /** Unsigned int64 type value */
-  sequence_number: Uint64;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
+   * All bytes (Vec<u8>) data is represented as hex-encoded string prefixed with `0x` and fulfilled with
    * two hex digits per byte.
    *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
+   * Unlike the `Address` type, HexEncodedBytes will not trim any zeros.
    */
   authentication_key: HexEncodedBytes;
 }
 
+export type AccountSignature =
+  | AccountSignatureEd25519Signature
+  | AccountSignatureMultiEd25519Signature;
+
+export type AccountSignatureEd25519Signature = {
+  type: string;
+} & Ed25519Signature;
+
+export type AccountSignatureMultiEd25519Signature = {
+  type: string;
+} & MultiEd25519Signature;
+
 /**
- * Account resource is a Move struct value belongs to an account.
- * @example {"type":"0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>","data":{"coin":{"value":"8000000000"}}}
+ * Hex encoded 32 byte Aptos account address
+ * @format hex
+ * @example 0x88fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1
  */
-export interface AccountResource {
+export type Address = string;
+
+/**
+* This is the generic struct we use for all API errors, it contains a string
+message and an Aptos API specific error code.
+*/
+export interface AptosError {
+  message: string;
+
   /**
-   * String representation of an on-chain Move struct type.
+   * These codes provide more granular error information beyond just the HTTP
+   * status code of the response.
+   */
+  error_code?: AptosErrorCode;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  aptos_ledger_version?: U64;
+}
+
+/**
+* These codes provide more granular error information beyond just the HTTP
+status code of the response.
+*/
+export enum AptosErrorCode {
+  ReadFromStorageError = "read_from_storage_error",
+  InvalidBcsInStorageError = "invalid_bcs_in_storage_error",
+  BcsSerializationError = "bcs_serialization_error",
+  InvalidStartParam = "invalid_start_param",
+  InvalidLimitParam = "invalid_limit_param",
+}
+
+export interface Block {
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  block_height: U64;
+  block_hash: HashValue;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  block_timestamp: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  first_version: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  last_version: U64;
+  transactions?: Transaction[];
+}
+
+export interface BlockMetadataTransaction {
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  version: U64;
+  hash: HashValue;
+  state_root_hash: HashValue;
+  event_root_hash: HashValue;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  gas_used: U64;
+  success: boolean;
+  vm_status: string;
+  accumulator_root_hash: HashValue;
+  changes: WriteSetChange[];
+  id: HashValue;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  epoch: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  round: U64;
+  events: Event[];
+  previous_block_votes_bitvec: number[];
+
+  /** Hex encoded 32 byte Aptos account address */
+  proposer: Address;
+  failed_proposer_indices: number[];
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  timestamp: U64;
+}
+
+export interface DecodedTableData {
+  key: any;
+  key_type: string;
+  value: any;
+  value_type: string;
+}
+
+export interface DeleteModule {
+  /** Hex encoded 32 byte Aptos account address */
+  address: Address;
+  state_key_hash: string;
+
+  /**
+   * Move module id is a string representation of Move module.
+   *
+   * Format: `{address}::{module name}`
+   * `address` should be hex-encoded 32 byte account address that is prefixed with `0x`.
+   * Module name is case-sensitive.
+   */
+  module: MoveModuleId;
+}
+
+export interface DeleteResource {
+  /** Hex encoded 32 byte Aptos account address */
+  address: Address;
+  state_key_hash: string;
+
+  /**
+   * String representation of a MoveStructTag (on-chain Move struct type). This exists so you
+   * can specify MoveStructTags as path / query parameters, e.g. for get_events_by_event_handle.
    *
    * It is a combination of:
-   *   1. `Move module address`, `module name` and `struct name` joined by `::`.
-   *   2. `struct generic type parameters` joined by `, `.
+   *   1. `move_module_address`, `module_name` and `struct_name`, all joined by `::`
+   *   2. `struct generic type parameters` joined by `, `
    * Examples:
    *   * `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>`
    *   * `0x1::account::Account`
    * Note:
    *   1. Empty chars should be ignored when comparing 2 struct tag ids.
    *   2. When used in an URL path, should be encoded by url-encoding (AKA percent-encoding).
-   * See [doc](https://diem.github.io/move/structs-and-resources.html) for more details.
+   * See [doc](https://aptos.dev/concepts/basics-accounts) for more details.
    */
-  type: MoveStructTagId;
+  resource: MoveStructTag;
+}
+
+export interface DeleteTableItem {
+  state_key_hash: string;
 
   /**
-   * Account resource data is JSON representation of the Move struct `type`.
+   * All bytes (Vec<u8>) data is represented as hex-encoded string prefixed with `0x` and fulfilled with
+   * two hex digits per byte.
    *
-   * Move struct field name and value are serialized as object property name and value.
+   * Unlike the `Address` type, HexEncodedBytes will not trim any zeros.
    */
-  data: object;
+  handle: HexEncodedBytes;
+
+  /**
+   * All bytes (Vec<u8>) data is represented as hex-encoded string prefixed with `0x` and fulfilled with
+   * two hex digits per byte.
+   *
+   * Unlike the `Address` type, HexEncodedBytes will not trim any zeros.
+   */
+  key: HexEncodedBytes;
+  data?: DeletedTableData;
+}
+
+export interface DeletedTableData {
+  key: any;
+  key_type: string;
+}
+
+export interface DirectWriteSet {
+  changes: WriteSetChange[];
+  events: Event[];
+}
+
+export interface Ed25519Signature {
+  /**
+   * All bytes (Vec<u8>) data is represented as hex-encoded string prefixed with `0x` and fulfilled with
+   * two hex digits per byte.
+   *
+   * Unlike the `Address` type, HexEncodedBytes will not trim any zeros.
+   */
+  public_key: HexEncodedBytes;
+
+  /**
+   * All bytes (Vec<u8>) data is represented as hex-encoded string prefixed with `0x` and fulfilled with
+   * two hex digits per byte.
+   *
+   * Unlike the `Address` type, HexEncodedBytes will not trim any zeros.
+   */
+  signature: HexEncodedBytes;
+}
+
+export interface EncodeSubmissionRequest {
+  /** Hex encoded 32 byte Aptos account address */
+  sender: Address;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  sequence_number: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  max_gas_amount: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  gas_unit_price: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  expiration_timestamp_secs: U64;
+  payload: TransactionPayload;
+  secondary_signers?: Address[];
 }
 
 /**
-* String representation of an on-chain Move type tag that is exposed in transaction payload.
+* Entry function id is string representation of a entry function defined on-chain.
 
-Values:
-  - bool
-  - u8
-  - u64
-  - u128
-  - address
-  - signer
-  - vector: `vector<{non-reference MoveTypeId}>`
-  - struct: `{address}::{module_name}::{struct_name}::<{generic types}>`
+Format: `{address}::{module name}::{function name}`
 
-Vector type value examples:
-  * `vector<u8>`
-  * `vector<vector<u64>>`
-  * `vector<0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>>`
-
-Struct type value examples:
-  * `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>
-  * `0x1::account::Account`
-
-Note:
-  1. Empty chars should be ignored when comparing 2 struct tag ids.
-  2. When used in an URL path, should be encoded by url-encoding (AKA percent-encoding).
-* @pattern ^(bool|u8|u64|u128|address|signer|vector<.+>|0x[0-9a-zA-Z:_<, >]+)$
-* @example 0x1::aptos_coin::AptosCoin
+Both `module name` and `function name` are case-sensitive.
+* @example 0x1::aptos_coin::transfer
 */
-export type MoveTypeTagId = string;
+export type EntryFunctionId = string;
+
+export interface EntryFunctionPayload {
+  /**
+   * Entry function id is string representation of a entry function defined on-chain.
+   *
+   * Format: `{address}::{module name}::{function name}`
+   * Both `module name` and `function name` are case-sensitive.
+   */
+  function: EntryFunctionId;
+  type_arguments: MoveType[];
+  arguments: any[];
+}
+
+export interface Event {
+  /**
+   * Event key is a global index for an event stream.
+   *
+   * It is hex-encoded BCS bytes of `EventHandle` `guid` field value, which is
+   * a combination of a `uint64` creation number and account address (without
+   * trimming leading zeros).
+   * For example, event key `0x000000000000000088fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1` is combined by the following 2 parts:
+   *   1. `0000000000000000`: `uint64` representation of `0`.
+   *   2. `88fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1`: 32 bytes of account address.
+   */
+  key: EventKey;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  sequence_number: U64;
+
+  /**
+   * String representation of an on-chain Move type tag that is exposed in transaction payload.
+   *     Values:
+   *       - bool
+   *       - u8
+   *       - u64
+   *       - u128
+   *       - address
+   *       - signer
+   *       - vector: `vector<{non-reference MoveTypeId}>`
+   *       - struct: `{address}::{module_name}::{struct_name}::<{generic types}>`
+   *
+   *     Vector type value examples:
+   *       - `vector<u8>`
+   *       - `vector<vector<u64>>`
+   *       - `vector<0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>>`
+   *     Struct type value examples:
+   *       - `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>
+   *       - `0x1::account::Account`
+   *     Note:
+   *       1. Empty chars should be ignored when comparing 2 struct tag ids.
+   *       2. When used in an URL path, should be encoded by url-encoding (AKA percent-encoding).
+   */
+  type: MoveType;
+  data: any;
+}
 
 /**
-* String representation of an on-chain Move type identifier defined by the Move language.
+* Event key is a global index for an event stream.
 
-Values:
-  - bool
-  - u8
-  - u64
-  - u128
-  - address
-  - signer
-  - vector: `vector<{non-reference MoveTypeId}>`
-  - struct: `{address}::{module_name}::{struct_name}::<{generic types}>`
-  - reference: immutable `&` and mutable `&mut` references.
-  - generic_type_parameter: it is always start with `T` and following an index number,
-    which is the position of the generic type parameter in the `struct` or
-    `function` generic type parameters definition.
+It is hex-encoded BCS bytes of `EventHandle` `guid` field value, which is
+a combination of a `uint64` creation number and account address (without
+trimming leading zeros).
 
-Vector type value examples:
-  * `vector<u8>`
-  * `vector<vector<u64>>`
-  * `vector<0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>>`
-
-Struct type value examples:
-  * `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>`
-  * `0x1::account::Account`
-
-Reference type value examples:
-  * `&signer`
-  * `&mut address`
-  * `&mut vector<u8>`
-* @pattern ^(bool|u8|u64|u128|address|signer|vector<.+>|0x[0-9a-zA-Z:_<, >]+|^&(mut )?.+$|T\d+)$
-* @example 0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>
+For example, event key `0x000000000000000088fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1` is combined by the following 2 parts:
+  1. `0000000000000000`: `uint64` representation of `0`.
+  2. `88fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1`: 32 bytes of account address.
+* @format hex
+* @example 0x000000000000000088fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1 
 */
-export type MoveTypeId = string;
+export type EventKey = string;
+
+export type GenesisPayload = GenesisPayloadWriteSetPayload;
+
+export type GenesisPayloadWriteSetPayload = { type: string } & WriteSetPayload;
+
+export interface GenesisTransaction {
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  version: U64;
+  hash: HashValue;
+  state_root_hash: HashValue;
+  event_root_hash: HashValue;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  gas_used: U64;
+  success: boolean;
+  vm_status: string;
+  accumulator_root_hash: HashValue;
+  changes: WriteSetChange[];
+  payload: GenesisPayload;
+  events: Event[];
+}
+
+export type HashValue = string;
+
+export interface HealthCheckSuccess {
+  message: string;
+}
 
 /**
-* String representation of an on-chain Move struct type.
+* All bytes (Vec<u8>) data is represented as hex-encoded string prefixed with `0x` and fulfilled with
+two hex digits per byte.
+
+Unlike the `Address` type, HexEncodedBytes will not trim any zeros.
+* @format hex
+* @example 0x88fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1 
+*/
+export type HexEncodedBytes = string;
+
+export type IdentifierWrapper = string;
+
+/**
+* The struct holding all data returned to the client by the
+index endpoint (i.e., GET "/").
+*/
+export interface IndexResponse {
+  /** @format uint8 */
+  chain_id: number;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  epoch: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  ledger_version: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  oldest_ledger_version: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  block_height: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  oldest_block_height: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  ledger_timestamp: U64;
+  node_role: RoleType;
+}
+
+export interface ModuleBundlePayload {
+  modules: MoveModuleBytecode[];
+}
+
+export type MoveAbility = string;
+
+export interface MoveFunction {
+  name: IdentifierWrapper;
+  visibility: MoveFunctionVisibility;
+  is_entry: boolean;
+  generic_type_params: MoveFunctionGenericTypeParam[];
+  params: MoveType[];
+  return: MoveType[];
+}
+
+export interface MoveFunctionGenericTypeParam {
+  constraints: MoveAbility[];
+}
+
+export enum MoveFunctionVisibility {
+  Private = "private",
+  Public = "public",
+  Friend = "friend",
+}
+
+export interface MoveModule {
+  /** Hex encoded 32 byte Aptos account address */
+  address: Address;
+  name: IdentifierWrapper;
+  friends: MoveModuleId[];
+  exposed_functions: MoveFunction[];
+  structs: MoveStruct[];
+}
+
+export interface MoveModuleBytecode {
+  /**
+   * All bytes (Vec<u8>) data is represented as hex-encoded string prefixed with `0x` and fulfilled with
+   * two hex digits per byte.
+   *
+   * Unlike the `Address` type, HexEncodedBytes will not trim any zeros.
+   */
+  bytecode: HexEncodedBytes;
+  abi?: MoveModule;
+}
+
+/**
+* Move module id is a string representation of Move module.
+
+Format: `{address}::{module name}`
+
+`address` should be hex-encoded 32 byte account address that is prefixed with `0x`.
+
+Module name is case-sensitive.
+* @example 0x1::aptos_coin
+*/
+export type MoveModuleId = string;
+
+export interface MoveResource {
+  /**
+   * String representation of a MoveStructTag (on-chain Move struct type). This exists so you
+   * can specify MoveStructTags as path / query parameters, e.g. for get_events_by_event_handle.
+   *
+   * It is a combination of:
+   *   1. `move_module_address`, `module_name` and `struct_name`, all joined by `::`
+   *   2. `struct generic type parameters` joined by `, `
+   * Examples:
+   *   * `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>`
+   *   * `0x1::account::Account`
+   * Note:
+   *   1. Empty chars should be ignored when comparing 2 struct tag ids.
+   *   2. When used in an URL path, should be encoded by url-encoding (AKA percent-encoding).
+   * See [doc](https://aptos.dev/concepts/basics-accounts) for more details.
+   */
+  type: MoveStructTag;
+
+  /**
+   * This is a JSON representation of some data within an account resource. More specifically,
+   * it is a map of strings to arbitrary JSON values / objects, where the keys are top level
+   * fields within the given resource.
+   *
+   * To clarify, you might query for 0x1::account::Account and see the example data.
+   * Move `bool` type value is serialized into `boolean`.
+   * Move `u8` type value is serialized into `integer`.
+   * Move `u64` and `u128` type value is serialized into `string`.
+   * Move `address` type value (32 byte Aptos account address) is serialized into a HexEncodedBytes string.
+   * For example:
+   *   - `0x1`
+   *   - `0x1668f6be25668c1a17cd8caf6b8d2f25`
+   * Move `vector` type value is serialized into `array`, except `vector<u8>` which is serialized into a
+   * HexEncodedBytes string with `0x` prefix.
+   *   - `vector<u64>{255, 255}` => `["255", "255"]`
+   *   - `vector<u8>{255, 255}` => `0xffff`
+   * Move `struct` type value is serialized into `object` that looks like this (except some Move stdlib types, see the following section):
+   *   ```json
+   *   {
+   *     field1_name: field1_value,
+   *     field2_name: field2_value,
+   *     ......
+   *   }
+   *   ```
+   *   `{ "created": "0xa550c18", "role_id": "0" }`
+   * **Special serialization for Move stdlib types**:
+   *   - [0x1::string::String](https://github.com/aptos-labs/aptos-core/blob/main/language/move-stdlib/docs/ascii.md)
+   *     is serialized into `string`. For example, struct value `0x1::string::String{bytes: b"Hello World!"}`
+   *     is serialized as `"Hello World!"` in JSON.
+   */
+  data: MoveStructValue;
+}
+
+export interface MoveScriptBytecode {
+  /**
+   * All bytes (Vec<u8>) data is represented as hex-encoded string prefixed with `0x` and fulfilled with
+   * two hex digits per byte.
+   *
+   * Unlike the `Address` type, HexEncodedBytes will not trim any zeros.
+   */
+  bytecode: HexEncodedBytes;
+  abi?: MoveFunction;
+}
+
+export interface MoveStruct {
+  name: IdentifierWrapper;
+  is_native: boolean;
+  abilities: MoveAbility[];
+  generic_type_params: MoveStructGenericTypeParam[];
+  fields: MoveStructField[];
+}
+
+export interface MoveStructField {
+  name: IdentifierWrapper;
+
+  /**
+   * String representation of an on-chain Move type tag that is exposed in transaction payload.
+   *     Values:
+   *       - bool
+   *       - u8
+   *       - u64
+   *       - u128
+   *       - address
+   *       - signer
+   *       - vector: `vector<{non-reference MoveTypeId}>`
+   *       - struct: `{address}::{module_name}::{struct_name}::<{generic types}>`
+   *
+   *     Vector type value examples:
+   *       - `vector<u8>`
+   *       - `vector<vector<u64>>`
+   *       - `vector<0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>>`
+   *     Struct type value examples:
+   *       - `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>
+   *       - `0x1::account::Account`
+   *     Note:
+   *       1. Empty chars should be ignored when comparing 2 struct tag ids.
+   *       2. When used in an URL path, should be encoded by url-encoding (AKA percent-encoding).
+   */
+  type: MoveType;
+}
+
+export interface MoveStructGenericTypeParam {
+  constraints: MoveAbility[];
+}
+
+/**
+* String representation of a MoveStructTag (on-chain Move struct type). This exists so you
+can specify MoveStructTags as path / query parameters, e.g. for get_events_by_event_handle.
 
 It is a combination of:
-  1. `Move module address`, `module name` and `struct name` joined by `::`.
-  2. `struct generic type parameters` joined by `, `.
+  1. `move_module_address`, `module_name` and `struct_name`, all joined by `::`
+  2. `struct generic type parameters` joined by `, `
 
 Examples:
   * `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>`
@@ -240,591 +674,37 @@ Note:
   1. Empty chars should be ignored when comparing 2 struct tag ids.
   2. When used in an URL path, should be encoded by url-encoding (AKA percent-encoding).
 
-See [doc](https://diem.github.io/move/structs-and-resources.html) for more details.
-* @format move_type
+See [doc](https://aptos.dev/concepts/basics-accounts) for more details.
 * @pattern ^0x[0-9a-zA-Z:_<>]+$
 * @example 0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>
 */
-export type MoveStructTagId = string;
-
-export interface MoveModule {
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  bytecode: HexEncodedBytes;
-
-  /**
-   * Move Module ABI is JSON representation of Move module binary interface.
-   *
-   */
-  abi?: MoveModuleABI;
-}
+export type MoveStructTag = string;
 
 /**
- * Move Module ABI is JSON representation of Move module binary interface.
- */
-export interface MoveModuleABI {
-  /**
-   * Hex-encoded 16 bytes Aptos account address.
-   *
-   * Prefixed with `0x` and leading zeros are trimmed.
-   * See [doc](https://diem.github.io/move/address.html) for more details.
-   */
-  address: Address;
+* This is a JSON representation of some data within an account resource. More specifically,
+it is a map of strings to arbitrary JSON values / objects, where the keys are top level
+fields within the given resource.
 
-  /** @example Aptos */
-  name: string;
-  friends: MoveModuleId[];
-  exposed_functions: MoveFunction[];
-  structs: MoveStruct[];
-}
+To clarify, you might query for 0x1::account::Account and see the example data.
 
-/**
- * @example {"name":"Balance","is_native":false,"abilities":["key"],"generic_type_params":[{"constraints":[],"is_phantom":true}],"fields":[{"name":"coin","type":"0x1::aptos_coin::AptosCoin"}]}
- */
-export interface MoveStruct {
-  name: string;
-  is_native: boolean;
-  abilities: MoveAbility[];
-  generic_type_params: { constraints: MoveAbility[]; is_phantom: boolean }[];
-  fields: MoveStructField[];
-}
-
-/**
- * @example {"name":"value","type":"u64"}
- */
-export interface MoveStructField {
-  name: string;
-
-  /**
-   * String representation of an on-chain Move type identifier defined by the Move language.
-   *
-   * Values:
-   *   - bool
-   *   - u8
-   *   - u64
-   *   - u128
-   *   - address
-   *   - signer
-   *   - vector: `vector<{non-reference MoveTypeId}>`
-   *   - struct: `{address}::{module_name}::{struct_name}::<{generic types}>`
-   *   - reference: immutable `&` and mutable `&mut` references.
-   *   - generic_type_parameter: it is always start with `T` and following an index number,
-   *     which is the position of the generic type parameter in the `struct` or
-   *     `function` generic type parameters definition.
-   * Vector type value examples:
-   *   * `vector<u8>`
-   *   * `vector<vector<u64>>`
-   *   * `vector<0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>>`
-   * Struct type value examples:
-   *   * `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>`
-   *   * `0x1::account::Account`
-   * Reference type value examples:
-   *   * `&signer`
-   *   * `&mut address`
-   *   * `&mut vector<u8>`
-   */
-  type: MoveTypeId;
-}
-
-/**
- * @example {"name":"peer_to_peer_with_metadata","visibility":"script","generic_type_params":[{"constraints":[]}],"params":["signer","address","u64","vector<u8>","vector<u8>"],"return":[]}
- */
-export interface MoveFunction {
-  /** Move function name */
-  name: string;
-  visibility: "public" | "script" | "friend";
-  generic_type_params: { constraints: MoveAbility[] }[];
-  params: MoveTypeId[];
-  return: MoveTypeId[];
-}
-
-/**
-* Abilities are a typing feature in Move that control what actions are permissible for values of a given type.
-
-See [doc](https://diem.github.io/move/abilities.html) for more details.
-* @example key
-*/
-export enum MoveAbility {
-  Copy = "copy",
-  Drop = "drop",
-  Store = "store",
-  Key = "key",
-}
-
-/**
-* Move module id is a string representation of Move module.
-
-Format: "{address}::{module name}"
-
-`address` should be hex-encoded 16 bytes account address
-that is prefixed with `0x` and leading zeros are trimmed.
-
-Module name is case-sensitive.
-
-See [doc](https://diem.github.io/move/modules-and-scripts.html#modules) for more details.
-* @example 0x1::aptos
-*/
-export type MoveModuleId = string;
-
-export interface UserTransactionRequest {
-  /**
-   * Hex-encoded 16 bytes Aptos account address.
-   *
-   * Prefixed with `0x` and leading zeros are trimmed.
-   * See [doc](https://diem.github.io/move/address.html) for more details.
-   */
-  sender: Address;
-
-  /** Unsigned int64 type value */
-  sequence_number: Uint64;
-
-  /** Unsigned int64 type value */
-  max_gas_amount: Uint64;
-
-  /** Unsigned int64 type value */
-  gas_unit_price: Uint64;
-
-  /** @example XDX */
-  gas_currency_code?: string;
-
-  /**
-   * Timestamp in seconds, e.g. transaction expiration timestamp.
-   *
-   */
-  expiration_timestamp_secs: TimestampSec;
-  payload: TransactionPayload;
-}
-
-export type UserCreateSigningMessageRequest = UserTransactionRequest & {
-  secondary_signers?: Address[];
-};
-
-/**
- * This schema is used for appending `signature` field to another schema.
- */
-export interface UserTransactionSignature {
-  signature: TransactionSignature;
-}
-
-export type Transaction =
-  | PendingTransaction
-  | GenesisTransaction
-  | UserTransaction
-  | BlockMetadataTransaction
-  | StateCheckpointTransaction;
-
-export type SubmitTransactionRequest = UserTransactionRequest &
-  UserTransactionSignature;
-
-export type PendingTransaction = {
-  type: string;
-  hash: HexEncodedBytes;
-} & UserTransactionRequest &
-  UserTransactionSignature;
-
-export type OnChainTransaction =
-  | GenesisTransaction
-  | UserTransaction
-  | BlockMetadataTransaction
-  | StateCheckpointTransaction;
-
-export interface OnChainTransactionInfo {
-  /** Unsigned int64 type value */
-  version: Uint64;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  hash: HexEncodedBytes;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  state_root_hash: HexEncodedBytes;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  event_root_hash: HexEncodedBytes;
-
-  /** Unsigned int64 type value */
-  gas_used: Uint64;
-
-  /**
-   * Transaction execution result (success: true, failure: false).
-   * See `vm_status` for human readable error message from Aptos VM.
-   *
-   */
-  success: boolean;
-
-  /**
-   * Human readable transaction execution result message from Aptos VM.
-   *
-   */
-  vm_status: string;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  accumulator_root_hash: HexEncodedBytes;
-  changes: WriteSetChange[];
-}
-
-export type UserTransaction = {
-  type: string;
-  events: Event[];
-  timestamp: TimestampUsec;
-} & UserTransactionRequest &
-  UserTransactionSignature &
-  OnChainTransactionInfo;
-
-export type BlockMetadataTransaction = {
-  type: string;
-  id: HexEncodedBytes;
-  round: Uint64;
-  previous_block_votes: Address[];
-  proposer: Address;
-  timestamp: TimestampUsec;
-} & OnChainTransactionInfo;
-
-export type GenesisTransaction = {
-  type: string;
-  events: Event[];
-  payload: WriteSetPayload;
-} & OnChainTransactionInfo;
-
-export type StateCheckpointTransaction = {
-  type: string;
-  timestamp: TimestampUsec;
-} & OnChainTransactionInfo;
-
-export type TransactionPayload =
-  | ScriptFunctionPayload
-  | ScriptPayload
-  | ModuleBundlePayload
-  | WriteSetPayload;
-
-/**
- * @example {"type":"script_function_payload","function":"0x1::payment_scripts::peer_to_peer_with_metadata","type_arguments":["0x1::xdx::XDX"],"arguments":["0x1668f6be25668c1a17cd8caf6b8d2f25","2021000000","0x","0x"]}
- */
-export interface ScriptFunctionPayload {
-  type: string;
-
-  /**
-   * Script function id is string representation of a script function defined on-chain.
-   *
-   * Format: `{address}::{module name}::{function name}`
-   * Both `module name` and `function name` are case-sensitive.
-   */
-  function: ScriptFunctionId;
-
-  /** Generic type arguments required by the script function. */
-  type_arguments: MoveTypeTagId[];
-
-  /** The script function arguments. */
-  arguments: MoveValue[];
-}
-
-/**
-* Script function id is string representation of a script function defined on-chain.
-
-Format: `{address}::{module name}::{function name}`
-
-Both `module name` and `function name` are case-sensitive.
-* @example 0x1::payment_scripts::peer_to_peer_with_metadata
-*/
-export type ScriptFunctionId = string;
-
-export interface ScriptPayload {
-  /** @example script_payload */
-  type: string;
-  code: MoveScript;
-  type_arguments: MoveTypeTagId[];
-  arguments: MoveValue[];
-}
-
-export interface ModuleBundlePayload {
-  /** @example module_bundle_payload */
-  type: string;
-  modules: MoveModule[];
-}
-
-export interface WriteSetPayload {
-  /** @example write_set_payload */
-  type: string;
-  write_set: WriteSet;
-}
-
-export type WriteSet = ScriptWriteSet | DirectWriteSet;
-
-export interface ScriptWriteSet {
-  /** @example script_write_set */
-  type: string;
-
-  /**
-   * Hex-encoded 16 bytes Aptos account address.
-   *
-   * Prefixed with `0x` and leading zeros are trimmed.
-   * See [doc](https://diem.github.io/move/address.html) for more details.
-   */
-  execute_as: Address;
-  script: Script;
-}
-
-export interface DirectWriteSet {
-  /** @example direct_write_set */
-  type: string;
-  changes: WriteSetChange[];
-  events: Event[];
-}
-
-export type WriteSetChange =
-  | DeleteModule
-  | DeleteResource
-  | DeleteTableItem
-  | WriteModule
-  | WriteResource
-  | WriteTableItem;
-
-export interface DeleteModule {
-  /** @example delete_module */
-  type: string;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  state_key_hash: HexEncodedBytes;
-
-  /**
-   * Hex-encoded 16 bytes Aptos account address.
-   *
-   * Prefixed with `0x` and leading zeros are trimmed.
-   * See [doc](https://diem.github.io/move/address.html) for more details.
-   */
-  address: Address;
-
-  /**
-   * Move module id is a string representation of Move module.
-   *
-   * Format: "{address}::{module name}"
-   * `address` should be hex-encoded 16 bytes account address
-   * that is prefixed with `0x` and leading zeros are trimmed.
-   * Module name is case-sensitive.
-   * See [doc](https://diem.github.io/move/modules-and-scripts.html#modules) for more details.
-   */
-  module: MoveModuleId;
-}
-
-/**
- * Delete account resource change.
- */
-export interface DeleteResource {
-  /** @example delete_resource */
-  type: string;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  state_key_hash: HexEncodedBytes;
-
-  /**
-   * Hex-encoded 16 bytes Aptos account address.
-   *
-   * Prefixed with `0x` and leading zeros are trimmed.
-   * See [doc](https://diem.github.io/move/address.html) for more details.
-   */
-  address: Address;
-
-  /**
-   * String representation of an on-chain Move struct type.
-   *
-   * It is a combination of:
-   *   1. `Move module address`, `module name` and `struct name` joined by `::`.
-   *   2. `struct generic type parameters` joined by `, `.
-   * Examples:
-   *   * `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>`
-   *   * `0x1::account::Account`
-   * Note:
-   *   1. Empty chars should be ignored when comparing 2 struct tag ids.
-   *   2. When used in an URL path, should be encoded by url-encoding (AKA percent-encoding).
-   * See [doc](https://diem.github.io/move/structs-and-resources.html) for more details.
-   */
-  resource: MoveStructTagId;
-}
-
-/**
- * Delete table item change.
- */
-export interface DeleteTableItem {
-  /** @example delete_table_item */
-  type: string;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  state_key_hash: HexEncodedBytes;
-
-  /** Table item deletion */
-  data: { handle: HexEncodedBytes; key: HexEncodedBytes };
-}
-
-/**
- * Write move module
- */
-export interface WriteModule {
-  /** @example write_module */
-  type: string;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  state_key_hash: HexEncodedBytes;
-
-  /**
-   * Hex-encoded 16 bytes Aptos account address.
-   *
-   * Prefixed with `0x` and leading zeros are trimmed.
-   * See [doc](https://diem.github.io/move/address.html) for more details.
-   */
-  address: Address;
-  data: MoveModule;
-}
-
-/**
- * Write account resource
- */
-export interface WriteResource {
-  /** @example write_resource */
-  type: string;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  state_key_hash: HexEncodedBytes;
-
-  /**
-   * Hex-encoded 16 bytes Aptos account address.
-   *
-   * Prefixed with `0x` and leading zeros are trimmed.
-   * See [doc](https://diem.github.io/move/address.html) for more details.
-   */
-  address: Address;
-
-  /** Account resource is a Move struct value belongs to an account. */
-  data: AccountResource;
-}
-
-/**
- * Write table item
- */
-export interface WriteTableItem {
-  /** @example write_table_item */
-  type: string;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  state_key_hash: HexEncodedBytes;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  handle: HexEncodedBytes;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  key: HexEncodedBytes;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  value: HexEncodedBytes;
-}
-
-export interface Script {
-  code: MoveScript;
-  type_arguments: MoveTypeTagId[];
-  arguments: MoveValue[];
-}
-
-export interface MoveScript {
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  bytecode: HexEncodedBytes;
-  abi?: MoveFunction;
-}
-
-/**
-* Move `bool` type value is serialized into `boolean`.
+Move `bool` type value is serialized into `boolean`.
 
 Move `u8` type value is serialized into `integer`.
 
 Move `u64` and `u128` type value is serialized into `string`.
 
-Move `address` type value(16 bytes Aptos account address) is serialized into
-hex-encoded string, which is prefixed with `0x` and leading zeros are trimmed.
-
+Move `address` type value (32 byte Aptos account address) is serialized into a HexEncodedBytes string.
 For example:
-  * `0x1`
-  * `0x1668f6be25668c1a17cd8caf6b8d2f25`
+  - `0x1`
+  - `0x1668f6be25668c1a17cd8caf6b8d2f25`
 
-Move `vector` type value is serialized into `array`, except `vector<u8>` which is
-serialized into hex-encoded string with `0x` prefix.
-
+Move `vector` type value is serialized into `array`, except `vector<u8>` which is serialized into a
+HexEncodedBytes string with `0x` prefix.
 For example:
-  * `vector<u64>{255, 255}` => `["255", "255"]`
-  * `vector<u8>{255, 255}` => `0xffff`
+  - `vector<u64>{255, 255}` => `["255", "255"]`
+  - `vector<u8>{255, 255}` => `0xffff`
 
 Move `struct` type value is serialized into `object` that looks like this (except some Move stdlib types, see the following section):
-
   ```json
   {
     field1_name: field1_value,
@@ -836,464 +716,802 @@ Move `struct` type value is serialized into `object` that looks like this (excep
 For example:
   `{ "created": "0xa550c18", "role_id": "0" }`
 
-**Special serialization for Move stdlib types:**
-
-* [0x1::string::String](https://github.com/aptos-labs/aptos-core/blob/main/language/move-stdlib/docs/ascii.md) is serialized into `string`. For example, struct value `0x1::string::String{bytes: b"hello world"}` is serialized as `"hello world"` in JSON.
-* @example 3344000000
+**Special serialization for Move stdlib types**:
+  - [0x1::string::String](https://github.com/aptos-labs/aptos-core/blob/main/language/move-stdlib/docs/ascii.md)
+    is serialized into `string`. For example, struct value `0x1::string::String{bytes: b"Hello World!"}`
+    is serialized as `"Hello World!"` in JSON.
+* @example {"authentication_key":"0x0000000000000000000000000000000000000000000000000000000000000001","coin_register_events":{"counter":"0","guid":{"id":{"addr":"0x1","creation_num":"0"}}},"self_address":"0x1","sequence_number":"0"}
 */
-export type MoveValue = any;
+export type MoveStructValue = object;
 
 /**
-* Event `key` and `sequence_number` are global identifier of the event.
+* String representation of an on-chain Move type tag that is exposed in transaction payload.
+    Values:
+      - bool
+      - u8
+      - u64
+      - u128
+      - address
+      - signer
+      - vector: `vector<{non-reference MoveTypeId}>`
+      - struct: `{address}::{module_name}::{struct_name}::<{generic types}>`
 
-Event `sequence_number` starts from 0 for each event key.
+    Vector type value examples:
+      - `vector<u8>`
+      - `vector<vector<u64>>`
+      - `vector<0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>>`
 
-Event `type` is the type information of the event `data`, you can use the `type`
-to decode the `data` JSON.
-* @example {"key":"0x00000000000000000000000000000000000000000a550c18","sequence_number":"23","type":"0x1::account::CreateAccountEvent","data":{"created":"0xa550c18","role_id":"0"}}
+    Struct type value examples:
+      - `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>
+      - `0x1::account::Account`
+
+    Note:
+      1. Empty chars should be ignored when comparing 2 struct tag ids.
+      2. When used in an URL path, should be encoded by url-encoding (AKA percent-encoding).
+* @pattern ^(bool|u8|u64|u128|address|signer|vector<.+>|0x[0-9a-zA-Z:_<, >]+)$
 */
-export interface Event {
-  /**
-   * Event key is a global index for an event stream.
-   *
-   * It is hex-encoded BCS bytes of `EventHandle` `guid` field value, which is
-   * a combination of a `uint64` creation number and account address
-   * (without trimming leading zeros).
-   * For example, event key `0x00000000000000000000000000000000000000000a550c18`
-   * is combined by the following 2 parts:
-   *   1. `0000000000000000`: `uint64` representation of `0`.
-   *   2. `0000000000000000000000000a550c18`: 16 bytes of account address.
-   */
-  key: EventKey;
+export type MoveType = string;
 
-  /**
-   * Event `sequence_number` is unique id of an event in an event stream.
-   * Event `sequence_number` starts from 0 for each event key.
-   *
-   */
-  sequence_number: EventSequenceNumber;
+export type MoveValue =
+  | number
+  | U64
+  | U128
+  | boolean
+  | Address
+  | MoveValue[]
+  | HexEncodedBytes
+  | MoveStructValue
+  | string
+  | (U64 & U128 & Address & MoveValue[] & HexEncodedBytes & MoveStructValue);
 
-  /**
-   * String representation of an on-chain Move type tag that is exposed in transaction payload.
-   *
-   * Values:
-   *   - bool
-   *   - u8
-   *   - u64
-   *   - u128
-   *   - address
-   *   - signer
-   *   - vector: `vector<{non-reference MoveTypeId}>`
-   *   - struct: `{address}::{module_name}::{struct_name}::<{generic types}>`
-   * Vector type value examples:
-   *   * `vector<u8>`
-   *   * `vector<vector<u64>>`
-   *   * `vector<0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>>`
-   * Struct type value examples:
-   *   * `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>
-   *   * `0x1::account::Account`
-   * Note:
-   *   1. Empty chars should be ignored when comparing 2 struct tag ids.
-   *   2. When used in an URL path, should be encoded by url-encoding (AKA percent-encoding).
-   */
-  type: MoveTypeTagId;
-
-  /**
-   * Move `bool` type value is serialized into `boolean`.
-   *
-   * Move `u8` type value is serialized into `integer`.
-   * Move `u64` and `u128` type value is serialized into `string`.
-   * Move `address` type value(16 bytes Aptos account address) is serialized into
-   * hex-encoded string, which is prefixed with `0x` and leading zeros are trimmed.
-   * For example:
-   *   * `0x1`
-   *   * `0x1668f6be25668c1a17cd8caf6b8d2f25`
-   * Move `vector` type value is serialized into `array`, except `vector<u8>` which is
-   * serialized into hex-encoded string with `0x` prefix.
-   *   * `vector<u64>{255, 255}` => `["255", "255"]`
-   *   * `vector<u8>{255, 255}` => `0xffff`
-   * Move `struct` type value is serialized into `object` that looks like this (except some Move stdlib types, see the following section):
-   *   ```json
-   *   {
-   *     field1_name: field1_value,
-   *     field2_name: field2_value,
-   *     ......
-   *   }
-   *   ```
-   *   `{ "created": "0xa550c18", "role_id": "0" }`
-   * **Special serialization for Move stdlib types:**
-   * * [0x1::string::String](https://github.com/aptos-labs/aptos-core/blob/main/language/move-stdlib/docs/ascii.md) is serialized into `string`. For example, struct value `0x1::string::String{bytes: b"hello world"}` is serialized as `"hello world"` in JSON.
-   */
-  data: MoveValue;
-}
-
-export type TransactionSignature =
-  | Ed25519Signature
-  | MultiEd25519Signature
-  | MultiAgentSignature;
-
-/**
-* Please refer to https://github.com/aptos-labs/aptos-core/tree/main/documentation/specifications/crypto#signature-and-verification for
-more details.
-*/
-export interface Ed25519Signature {
-  /** @example ed25519_signature */
-  type: string;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  public_key: HexEncodedBytes;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  signature: HexEncodedBytes;
-}
-
-/**
- * Multi ed25519 signature, please refer to https://github.com/aptos-labs/aptos-core/tree/main/documentation/specifications/crypto#multi-signatures for more details.
- */
-export interface MultiEd25519Signature {
-  /** @example multi_ed25519_signature */
-  type: string;
-
-  /** all public keys of the sender account */
-  public_keys: HexEncodedBytes[];
-
-  /** signatures created based on the `threshold` */
-  signatures: HexEncodedBytes[];
-
-  /** The threshold of the multi ed25519 account key. */
-  threshold: number;
-
-  /**
-   * All bytes data are represented as hex-encoded string prefixed with `0x` and fulfilled with
-   * two hex digits per byte.
-   *
-   * Different with `Address` type, hex-encoded bytes should not trim any zeros.
-   */
-  bitmap: HexEncodedBytes;
-}
-
-/**
- * Multi agent signature, please refer to TBD.
- */
 export interface MultiAgentSignature {
-  /** @example multi_agent_signature */
-  type: string;
   sender: AccountSignature;
   secondary_signer_addresses: Address[];
   secondary_signers: AccountSignature[];
 }
 
-export type AccountSignature = Ed25519Signature | MultiEd25519Signature;
+export interface MultiEd25519Signature {
+  public_keys: HexEncodedBytes[];
+  signatures: HexEncodedBytes[];
+
+  /** @format uint8 */
+  threshold: number;
+
+  /**
+   * All bytes (Vec<u8>) data is represented as hex-encoded string prefixed with `0x` and fulfilled with
+   * two hex digits per byte.
+   *
+   * Unlike the `Address` type, HexEncodedBytes will not trim any zeros.
+   */
+  bitmap: HexEncodedBytes;
+}
+
+export interface PendingTransaction {
+  hash: HashValue;
+
+  /** Hex encoded 32 byte Aptos account address */
+  sender: Address;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  sequence_number: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  max_gas_amount: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  gas_unit_price: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  expiration_timestamp_secs: U64;
+  payload: TransactionPayload;
+  signature?: TransactionSignature;
+}
+
+export enum RoleType {
+  Validator = "validator",
+  FullNode = "full_node",
+}
+
+export interface ScriptPayload {
+  code: MoveScriptBytecode;
+  type_arguments: MoveType[];
+  arguments: any[];
+}
+
+export interface ScriptWriteSet {
+  /** Hex encoded 32 byte Aptos account address */
+  execute_as: Address;
+  script: ScriptPayload;
+}
+
+export interface StateCheckpointTransaction {
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  version: U64;
+  hash: HashValue;
+  state_root_hash: HashValue;
+  event_root_hash: HashValue;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  gas_used: U64;
+  success: boolean;
+  vm_status: string;
+  accumulator_root_hash: HashValue;
+  changes: WriteSetChange[];
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  timestamp: U64;
+}
+
+export interface SubmitTransactionRequest {
+  /** Hex encoded 32 byte Aptos account address */
+  sender: Address;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  sequence_number: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  max_gas_amount: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  gas_unit_price: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  expiration_timestamp_secs: U64;
+  payload: TransactionPayload;
+  signature: TransactionSignature;
+}
 
 export interface TableItemRequest {
   /**
-   * String representation of an on-chain Move type identifier defined by the Move language.
+   * String representation of an on-chain Move type tag that is exposed in transaction payload.
+   *     Values:
+   *       - bool
+   *       - u8
+   *       - u64
+   *       - u128
+   *       - address
+   *       - signer
+   *       - vector: `vector<{non-reference MoveTypeId}>`
+   *       - struct: `{address}::{module_name}::{struct_name}::<{generic types}>`
    *
-   * Values:
-   *   - bool
-   *   - u8
-   *   - u64
-   *   - u128
-   *   - address
-   *   - signer
-   *   - vector: `vector<{non-reference MoveTypeId}>`
-   *   - struct: `{address}::{module_name}::{struct_name}::<{generic types}>`
-   *   - reference: immutable `&` and mutable `&mut` references.
-   *   - generic_type_parameter: it is always start with `T` and following an index number,
-   *     which is the position of the generic type parameter in the `struct` or
-   *     `function` generic type parameters definition.
-   * Vector type value examples:
-   *   * `vector<u8>`
-   *   * `vector<vector<u64>>`
-   *   * `vector<0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>>`
-   * Struct type value examples:
-   *   * `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>`
-   *   * `0x1::account::Account`
-   * Reference type value examples:
-   *   * `&signer`
-   *   * `&mut address`
-   *   * `&mut vector<u8>`
+   *     Vector type value examples:
+   *       - `vector<u8>`
+   *       - `vector<vector<u64>>`
+   *       - `vector<0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>>`
+   *     Struct type value examples:
+   *       - `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>
+   *       - `0x1::account::Account`
+   *     Note:
+   *       1. Empty chars should be ignored when comparing 2 struct tag ids.
+   *       2. When used in an URL path, should be encoded by url-encoding (AKA percent-encoding).
    */
-  key_type: MoveTypeId;
+  key_type: MoveType;
 
   /**
-   * String representation of an on-chain Move type identifier defined by the Move language.
+   * String representation of an on-chain Move type tag that is exposed in transaction payload.
+   *     Values:
+   *       - bool
+   *       - u8
+   *       - u64
+   *       - u128
+   *       - address
+   *       - signer
+   *       - vector: `vector<{non-reference MoveTypeId}>`
+   *       - struct: `{address}::{module_name}::{struct_name}::<{generic types}>`
    *
-   * Values:
-   *   - bool
-   *   - u8
-   *   - u64
-   *   - u128
-   *   - address
-   *   - signer
-   *   - vector: `vector<{non-reference MoveTypeId}>`
-   *   - struct: `{address}::{module_name}::{struct_name}::<{generic types}>`
-   *   - reference: immutable `&` and mutable `&mut` references.
-   *   - generic_type_parameter: it is always start with `T` and following an index number,
-   *     which is the position of the generic type parameter in the `struct` or
-   *     `function` generic type parameters definition.
-   * Vector type value examples:
-   *   * `vector<u8>`
-   *   * `vector<vector<u64>>`
-   *   * `vector<0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>>`
-   * Struct type value examples:
-   *   * `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>`
-   *   * `0x1::account::Account`
-   * Reference type value examples:
-   *   * `&signer`
-   *   * `&mut address`
-   *   * `&mut vector<u8>`
+   *     Vector type value examples:
+   *       - `vector<u8>`
+   *       - `vector<vector<u64>>`
+   *       - `vector<0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>>`
+   *     Struct type value examples:
+   *       - `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>
+   *       - `0x1::account::Account`
+   *     Note:
+   *       1. Empty chars should be ignored when comparing 2 struct tag ids.
+   *       2. When used in an URL path, should be encoded by url-encoding (AKA percent-encoding).
    */
-  value_type: MoveTypeId;
+  value_type: MoveType;
+  key: any;
+}
+
+export type Transaction =
+  | TransactionPendingTransaction
+  | TransactionUserTransaction
+  | TransactionGenesisTransaction
+  | TransactionBlockMetadataTransaction
+  | TransactionStateCheckpointTransaction;
+
+export type TransactionPayload =
+  | TransactionPayloadEntryFunctionPayload
+  | TransactionPayloadScriptPayload
+  | TransactionPayloadModuleBundlePayload;
+
+export type TransactionPayloadEntryFunctionPayload = {
+  type: string;
+} & EntryFunctionPayload;
+
+export type TransactionPayloadModuleBundlePayload = {
+  type: string;
+} & ModuleBundlePayload;
+
+export type TransactionPayloadScriptPayload = { type: string } & ScriptPayload;
+
+export type TransactionSignature =
+  | TransactionSignatureEd25519Signature
+  | TransactionSignatureMultiEd25519Signature
+  | TransactionSignatureMultiAgentSignature;
+
+export type TransactionSignatureEd25519Signature = {
+  type: string;
+} & Ed25519Signature;
+
+export type TransactionSignatureMultiAgentSignature = {
+  type: string;
+} & MultiAgentSignature;
+
+export type TransactionSignatureMultiEd25519Signature = {
+  type: string;
+} & MultiEd25519Signature;
+
+export type TransactionBlockMetadataTransaction = {
+  type: string;
+} & BlockMetadataTransaction;
+
+export type TransactionGenesisTransaction = {
+  type: string;
+} & GenesisTransaction;
+
+export type TransactionPendingTransaction = {
+  type: string;
+} & PendingTransaction;
+
+export type TransactionStateCheckpointTransaction = {
+  type: string;
+} & StateCheckpointTransaction;
+
+export type TransactionUserTransaction = { type: string } & UserTransaction;
+
+/**
+* A string containing a 128-bit unsigned integer.
+
+We represent u128 values as a string to ensure compatability with languages such
+as JavaScript that do not parse u64s in JSON natively.
+* @format uint64
+* @example 340282366920938463463374607431768211454
+*/
+export type U128 = string;
+
+/**
+* A string containing a 64-bit unsigned integer.
+
+We represent u64 values as a string to ensure compatability with languages such
+as JavaScript that do not parse u64s in JSON natively.
+* @format uint64
+* @example 32425224034
+*/
+export type U64 = string;
+
+export interface UserTransaction {
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  version: U64;
+  hash: HashValue;
+  state_root_hash: HashValue;
+  event_root_hash: HashValue;
 
   /**
-   * Move `bool` type value is serialized into `boolean`.
+   * A string containing a 64-bit unsigned integer.
    *
-   * Move `u8` type value is serialized into `integer`.
-   * Move `u64` and `u128` type value is serialized into `string`.
-   * Move `address` type value(16 bytes Aptos account address) is serialized into
-   * hex-encoded string, which is prefixed with `0x` and leading zeros are trimmed.
-   * For example:
-   *   * `0x1`
-   *   * `0x1668f6be25668c1a17cd8caf6b8d2f25`
-   * Move `vector` type value is serialized into `array`, except `vector<u8>` which is
-   * serialized into hex-encoded string with `0x` prefix.
-   *   * `vector<u64>{255, 255}` => `["255", "255"]`
-   *   * `vector<u8>{255, 255}` => `0xffff`
-   * Move `struct` type value is serialized into `object` that looks like this (except some Move stdlib types, see the following section):
-   *   ```json
-   *   {
-   *     field1_name: field1_value,
-   *     field2_name: field2_value,
-   *     ......
-   *   }
-   *   ```
-   *   `{ "created": "0xa550c18", "role_id": "0" }`
-   * **Special serialization for Move stdlib types:**
-   * * [0x1::string::String](https://github.com/aptos-labs/aptos-core/blob/main/language/move-stdlib/docs/ascii.md) is serialized into `string`. For example, struct value `0x1::string::String{bytes: b"hello world"}` is serialized as `"hello world"` in JSON.
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
    */
-  key: MoveValue;
+  gas_used: U64;
+  success: boolean;
+  vm_status: string;
+  accumulator_root_hash: HashValue;
+  changes: WriteSetChange[];
+
+  /** Hex encoded 32 byte Aptos account address */
+  sender: Address;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  sequence_number: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  max_gas_amount: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  gas_unit_price: U64;
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  expiration_timestamp_secs: U64;
+  payload: TransactionPayload;
+  signature?: TransactionSignature;
+  events: Event[];
+
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  timestamp: U64;
 }
 
-export interface TokenData {
-  /** Unique name within this creator's account for this Token's collection */
-  collection: string;
+export interface VersionedEvent {
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  version: U64;
 
-  /** Description of Token */
-  description: string;
+  /**
+   * Event key is a global index for an event stream.
+   *
+   * It is hex-encoded BCS bytes of `EventHandle` `guid` field value, which is
+   * a combination of a `uint64` creation number and account address (without
+   * trimming leading zeros).
+   * For example, event key `0x000000000000000088fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1` is combined by the following 2 parts:
+   *   1. `0000000000000000`: `uint64` representation of `0`.
+   *   2. `88fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1`: 32 bytes of account address.
+   */
+  key: EventKey;
 
-  /** Name of Token */
-  name: string;
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   */
+  sequence_number: U64;
 
-  /** Optional maximum number of this Token */
-  maximum?: number;
-
-  /** Total number of this type of Token */
-  supply: number;
-
-  /** URL for additional information / media */
-  uri: string;
+  /**
+   * String representation of an on-chain Move type tag that is exposed in transaction payload.
+   *     Values:
+   *       - bool
+   *       - u8
+   *       - u64
+   *       - u128
+   *       - address
+   *       - signer
+   *       - vector: `vector<{non-reference MoveTypeId}>`
+   *       - struct: `{address}::{module_name}::{struct_name}::<{generic types}>`
+   *
+   *     Vector type value examples:
+   *       - `vector<u8>`
+   *       - `vector<vector<u64>>`
+   *       - `vector<0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>>`
+   *     Struct type value examples:
+   *       - `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>
+   *       - `0x1::account::Account`
+   *     Note:
+   *       1. Empty chars should be ignored when comparing 2 struct tag ids.
+   *       2. When used in an URL path, should be encoded by url-encoding (AKA percent-encoding).
+   */
+  type: MoveType;
+  data: any;
 }
 
-export interface TokenDataId {
-  /** Token creator address */
-  creator: string;
-
-  /** Unique name within this creator's account for this Token's collection */
-  collection: string;
-
-  /** Name of Token */
-  name: string;
+export interface WriteModule {
+  /** Hex encoded 32 byte Aptos account address */
+  address: Address;
+  state_key_hash: string;
+  data: MoveModuleBytecode;
 }
 
-export interface TokenId {
-  token_data_id: TokenDataId;
-
-  /** version number of the property map */
-  property_version: string;
+export interface WriteResource {
+  /** Hex encoded 32 byte Aptos account address */
+  address: Address;
+  state_key_hash: string;
+  data: MoveResource;
 }
 
-export interface Token {
-  id: TokenId;
-  amount: number;
+export type WriteSet = WriteSetScriptWriteSet | WriteSetDirectWriteSet;
+
+export type WriteSetChange =
+  | WriteSetChangeDeleteModule
+  | WriteSetChangeDeleteResource
+  | WriteSetChangeDeleteTableItem
+  | WriteSetChangeWriteModule
+  | WriteSetChangeWriteResource
+  | WriteSetChangeWriteTableItem;
+
+export type WriteSetChangeDeleteModule = { type: string } & DeleteModule;
+
+export type WriteSetChangeDeleteResource = { type: string } & DeleteResource;
+
+export type WriteSetChangeDeleteTableItem = { type: string } & DeleteTableItem;
+
+export type WriteSetChangeWriteModule = { type: string } & WriteModule;
+
+export type WriteSetChangeWriteResource = { type: string } & WriteResource;
+
+export type WriteSetChangeWriteTableItem = { type: string } & WriteTableItem;
+
+export interface WriteSetPayload {
+  write_set: WriteSet;
+}
+
+export type WriteSetDirectWriteSet = { type: string } & DirectWriteSet;
+
+export type WriteSetScriptWriteSet = { type: string } & ScriptWriteSet;
+
+export interface WriteTableItem {
+  state_key_hash: string;
+
+  /**
+   * All bytes (Vec<u8>) data is represented as hex-encoded string prefixed with `0x` and fulfilled with
+   * two hex digits per byte.
+   *
+   * Unlike the `Address` type, HexEncodedBytes will not trim any zeros.
+   */
+  handle: HexEncodedBytes;
+
+  /**
+   * All bytes (Vec<u8>) data is represented as hex-encoded string prefixed with `0x` and fulfilled with
+   * two hex digits per byte.
+   *
+   * Unlike the `Address` type, HexEncodedBytes will not trim any zeros.
+   */
+  key: HexEncodedBytes;
+
+  /**
+   * All bytes (Vec<u8>) data is represented as hex-encoded string prefixed with `0x` and fulfilled with
+   * two hex digits per byte.
+   *
+   * Unlike the `Address` type, HexEncodedBytes will not trim any zeros.
+   */
+  value: HexEncodedBytes;
+  data?: DecodedTableData;
+}
+
+export interface GetAccountParams {
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   * @deprecated
+   */
+  ledger_version?: U64;
+
+  /**
+   * Hex encoded 32 byte Aptos account address
+   * @deprecated
+   */
+  address: Address;
 }
 
 export interface GetAccountResourcesParams {
   /**
-   * The version of the latest transaction in the ledger.
+   * A string containing a 64-bit unsigned integer.
    *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   * @deprecated
    */
-  version?: LedgerVersion;
+  ledger_version?: U64;
 
   /**
-   * Hex-encoded 16 bytes Aptos account address.
-   *
-   * Prefixed with `0x` and leading zeros are trimmed.
-   * See [doc](https://diem.github.io/move/address.html) for more details.
+   * Hex encoded 32 byte Aptos account address
+   * @deprecated
    */
   address: Address;
 }
 
-export interface GetAccountResourceParams {
+export interface GetAccountModulesParams {
   /**
-   * The version of the latest transaction in the ledger.
+   * A string containing a 64-bit unsigned integer.
    *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   * @deprecated
    */
-  version?: LedgerVersion;
+  ledger_version?: U64;
 
   /**
-   * Hex-encoded 16 bytes Aptos account address.
+   * Hex encoded 32 byte Aptos account address
+   * @deprecated
+   */
+  address: Address;
+}
+
+export interface HealthyParams {
+  /**
+   * @deprecated
+   * @format uint32
+   */
+  duration_secs?: number;
+}
+
+export interface GetBlockByHeightParams {
+  /** @deprecated */
+  with_transactions?: boolean;
+
+  /**
+   * @deprecated
+   * @format uint64
+   */
+  blockHeight: number;
+}
+
+export interface GetBlockByVersionParams {
+  /** @deprecated */
+  with_transactions?: boolean;
+
+  /**
+   * @deprecated
+   * @format uint64
+   */
+  version: number;
+}
+
+export interface GetEventsByEventKeyParams {
+  /**
+   * A string containing a 64-bit unsigned integer.
    *
-   * Prefixed with `0x` and leading zeros are trimmed.
-   * See [doc](https://diem.github.io/move/address.html) for more details.
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   * @deprecated
+   */
+  start?: U64;
+
+  /**
+   * @deprecated
+   * @format uint16
+   */
+  limit?: number;
+
+  /**
+   * Event key is a global index for an event stream.
+   *
+   * It is hex-encoded BCS bytes of `EventHandle` `guid` field value, which is
+   * a combination of a `uint64` creation number and account address (without
+   * trimming leading zeros).
+   * For example, event key `0x000000000000000088fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1` is combined by the following 2 parts:
+   *   1. `0000000000000000`: `uint64` representation of `0`.
+   *   2. `88fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1`: 32 bytes of account address.
+   * @deprecated
+   */
+  eventKey: EventKey;
+}
+
+export interface GetEventsByEventHandleParams {
+  /**
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   * @deprecated
+   */
+  start?: U64;
+
+  /**
+   * @deprecated
+   * @format uint16
+   */
+  limit?: number;
+
+  /**
+   * Hex encoded 32 byte Aptos account address
+   * @deprecated
    */
   address: Address;
 
   /**
-   * String representation of an on-chain Move struct type.
+   * String representation of a MoveStructTag (on-chain Move struct type). This exists so you
+   * can specify MoveStructTags as path / query parameters, e.g. for get_events_by_event_handle.
    *
    * It is a combination of:
-   *   1. `Move module address`, `module name` and `struct name` joined by `::`.
-   *   2. `struct generic type parameters` joined by `, `.
+   *   1. `move_module_address`, `module_name` and `struct_name`, all joined by `::`
+   *   2. `struct generic type parameters` joined by `, `
    * Examples:
    *   * `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>`
    *   * `0x1::account::Account`
    * Note:
    *   1. Empty chars should be ignored when comparing 2 struct tag ids.
    *   2. When used in an URL path, should be encoded by url-encoding (AKA percent-encoding).
-   * See [doc](https://diem.github.io/move/structs-and-resources.html) for more details.
-   * @example 0x1::account::Account
+   * See [doc](https://aptos.dev/concepts/basics-accounts) for more details.
+   * @deprecated
    */
-  resourceType: MoveStructTagId;
+  eventHandle: MoveStructTag;
+
+  /** @deprecated */
+  fieldName: IdentifierWrapper;
 }
 
-export interface GetAccountModulesParams {
+export interface GetAccountResourceParams {
   /**
-   * The version of the latest transaction in the ledger.
+   * A string containing a 64-bit unsigned integer.
    *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   * @deprecated
    */
-  version?: LedgerVersion;
+  ledger_version?: U64;
 
   /**
-   * Hex-encoded 16 bytes Aptos account address.
-   *
-   * Prefixed with `0x` and leading zeros are trimmed.
-   * See [doc](https://diem.github.io/move/address.html) for more details.
+   * Hex encoded 32 byte Aptos account address
+   * @deprecated
    */
   address: Address;
+
+  /**
+   * String representation of a MoveStructTag (on-chain Move struct type). This exists so you
+   * can specify MoveStructTags as path / query parameters, e.g. for get_events_by_event_handle.
+   *
+   * It is a combination of:
+   *   1. `move_module_address`, `module_name` and `struct_name`, all joined by `::`
+   *   2. `struct generic type parameters` joined by `, `
+   * Examples:
+   *   * `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>`
+   *   * `0x1::account::Account`
+   * Note:
+   *   1. Empty chars should be ignored when comparing 2 struct tag ids.
+   *   2. When used in an URL path, should be encoded by url-encoding (AKA percent-encoding).
+   * See [doc](https://aptos.dev/concepts/basics-accounts) for more details.
+   * @deprecated
+   */
+  resourceType: MoveStructTag;
 }
 
 export interface GetAccountModuleParams {
   /**
-   * The version of the latest transaction in the ledger.
+   * A string containing a 64-bit unsigned integer.
    *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   * @deprecated
    */
-  version?: LedgerVersion;
+  ledger_version?: U64;
 
   /**
-   * Hex-encoded 16 bytes Aptos account address.
-   *
-   * Prefixed with `0x` and leading zeros are trimmed.
-   * See [doc](https://diem.github.io/move/address.html) for more details.
+   * Hex encoded 32 byte Aptos account address
+   * @deprecated
    */
   address: Address;
 
+  /** @deprecated */
+  moduleName: IdentifierWrapper;
+}
+
+export interface GetTableItemParams {
   /**
-   * The name of the module.
-   * @example GUID
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   * @deprecated
    */
-  moduleName: string;
+  ledger_version?: U64;
+
+  /**
+   * A string containing a 128-bit unsigned integer.
+   *
+   * We represent u128 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   * @deprecated
+   */
+  tableHandle: U128;
 }
 
 export interface GetTransactionsParams {
   /**
-   * The start transaction version of the page. Default is the latest ledger version.
-   * @example 1
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   * @deprecated
    */
-  start?: number;
+  start?: U64;
 
   /**
-   * The max number of transactions should be returned for the page. Default is 25.
-   * @example 25
+   * @deprecated
+   * @format uint16
    */
   limit?: number;
 }
 
 export interface GetAccountTransactionsParams {
   /**
-   * The start transaction version of the page. Default is the latest ledger version.
-   * @example 1
+   * A string containing a 64-bit unsigned integer.
+   *
+   * We represent u64 values as a string to ensure compatability with languages such
+   * as JavaScript that do not parse u64s in JSON natively.
+   * @deprecated
    */
-  start?: number;
+  start?: U64;
 
   /**
-   * The max number of transactions should be returned for the page. Default is 25.
-   * @example 25
+   * @deprecated
+   * @format uint16
    */
   limit?: number;
 
   /**
-   * Hex-encoded 16 bytes Aptos account address.
-   *
-   * Prefixed with `0x` and leading zeros are trimmed.
-   * See [doc](https://diem.github.io/move/address.html) for more details.
+   * Hex encoded 32 byte Aptos account address
+   * @deprecated
    */
   address: Address;
-}
-
-export interface GetEventsByEventHandleParams {
-  /**
-   * The start sequence number in the EVENT STREAM, defaulting to the latest event.
-   * The events are returned in the reverse order of sequence numbers.
-   *
-   */
-  start?: number;
-
-  /**
-   * The number of events to be returned for the page default is 5
-   * @example 25
-   */
-  limit?: number;
-
-  /**
-   * Hex-encoded 16 bytes Aptos account address.
-   *
-   * Prefixed with `0x` and leading zeros are trimmed.
-   * See [doc](https://diem.github.io/move/address.html) for more details.
-   */
-  address: Address;
-
-  /**
-   * String representation of an on-chain Move struct type.
-   *
-   * It is a combination of:
-   *   1. `Move module address`, `module name` and `struct name` joined by `::`.
-   *   2. `struct generic type parameters` joined by `, `.
-   * Examples:
-   *   * `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>`
-   *   * `0x1::account::Account`
-   * Note:
-   *   1. Empty chars should be ignored when comparing 2 struct tag ids.
-   *   2. When used in an URL path, should be encoded by url-encoding (AKA percent-encoding).
-   * See [doc](https://diem.github.io/move/structs-and-resources.html) for more details.
-   * @example 0x1::account::Account
-   */
-  eventHandleStruct: MoveStructTagId;
-
-  /**
-   * The field name of the `EventHandle` in the struct.
-   *
-   * @example sent_events
-   */
-  fieldName: string;
 }

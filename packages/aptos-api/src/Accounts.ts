@@ -10,19 +10,19 @@
  */
 
 import {
-  Account,
-  AccountResource,
-  Address,
+  AccountData,
   AptosError,
-  Event,
   GetAccountModuleParams,
   GetAccountModulesParams,
+  GetAccountParams,
   GetAccountResourceParams,
   GetAccountResourcesParams,
   GetAccountTransactionsParams,
   GetEventsByEventHandleParams,
-  MoveModule,
-  OnChainTransaction,
+  MoveModuleBytecode,
+  MoveResource,
+  Transaction,
+  VersionedEvent,
 } from "@aptosis/aptos-data-contracts";
 import { HttpClient, RequestParams } from "./http-client.js";
 
@@ -34,41 +34,45 @@ export class Accounts<SecurityDataType = unknown> {
   }
 
   /**
-   * No description
+   * @description Return high level information about an account such as its sequence number.
    *
-   * @tags accounts, state
+   * @tags Accounts
    * @name GetAccount
    * @summary Get account
    * @request GET:/accounts/{address}
-   * @response `200` `Account` Returns the latest account core data resource.
-   * @response `400` `(AptosError)`
-   * @response `404` `(AptosError)`
-   * @response `500` `(AptosError)`
+   * @response `200` `AccountData`
+   * @response `400` `AptosError`
+   * @response `404` `AptosError`
+   * @response `500` `AptosError`
    */
-  getAccount = (address: Address, params: RequestParams = {}) =>
-    this.http.request<Account, AptosError>({
+  getAccount = (
+    { address, ...query }: GetAccountParams,
+    params: RequestParams = {}
+  ) =>
+    this.http.request<AccountData, AptosError>({
       path: `/accounts/${address}`,
       method: "GET",
+      query: query,
       format: "json",
       ...params,
     });
   /**
-   * No description
+   * @description This endpoint returns all account resources at a given address at a specific ledger version (AKA transaction version). If the ledger version is not specified in the request, the latest ledger version is used. The Aptos nodes prune account state history, via a configurable time window (link). If the requested data has been pruned, the server responds with a 404.
    *
-   * @tags accounts, state
+   * @tags Accounts
    * @name GetAccountResources
    * @summary Get account resources
    * @request GET:/accounts/{address}/resources
-   * @response `200` `(AccountResource)[]` This API returns account resources for a specific ledger version (AKA transaction version). If not present, the latest version is used. The Aptos nodes prune account state history, via a configurable time window (link). If the requested data has been pruned, the server responds with a 404
-   * @response `400` `(AptosError)`
-   * @response `404` `(AptosError)`
-   * @response `500` `(AptosError)`
+   * @response `200` `(MoveResource)[]`
+   * @response `400` `AptosError`
+   * @response `404` `AptosError`
+   * @response `500` `AptosError`
    */
   getAccountResources = (
     { address, ...query }: GetAccountResourcesParams,
     params: RequestParams = {}
   ) =>
-    this.http.request<AccountResource[], AptosError>({
+    this.http.request<MoveResource[], AptosError>({
       path: `/accounts/${address}/resources`,
       method: "GET",
       query: query,
@@ -76,91 +80,23 @@ export class Accounts<SecurityDataType = unknown> {
       ...params,
     });
   /**
-   * @description This API renders a resource identified by the owner account `address` and the `resource_type`, at a ledger version (AKA transaction version) specified as a query param, otherwise the latest version is used.
+   * @description This endpoint returns all account modules at a given address at a specific ledger version (AKA transaction version). If the ledger version is not specified in the request, the latest ledger version is used. The Aptos nodes prune account state history, via a configurable time window (link). If the requested data has been pruned, the server responds with a 404.
    *
-   * @tags accounts, state
-   * @name GetAccountResource
-   * @summary Get resource by account address and resource type.
-   * @request GET:/accounts/{address}/resource/{resource_type}
-   * @response `200` `AccountResource` Returns a resource.
-   * @response `400` `(AptosError)`
-   * @response `404` `(AptosError)`
-   * @response `500` `(AptosError)`
-   */
-  getAccountResource = (
-    { address, resourceType, ...query }: GetAccountResourceParams,
-    params: RequestParams = {}
-  ) =>
-    this.http.request<AccountResource, AptosError>({
-      path: `/accounts/${address}/resource/${resourceType}`,
-      method: "GET",
-      query: query,
-      format: "json",
-      ...params,
-    });
-  /**
-   * No description
-   *
-   * @tags accounts, state
+   * @tags Accounts
    * @name GetAccountModules
    * @summary Get account modules
    * @request GET:/accounts/{address}/modules
-   * @response `200` `(MoveModule)[]` This API returns account modules for a specific ledger version (AKA transaction version). If not present, the latest version is used. The Aptos nodes prune account state history, via a configurable time window (link). If the requested data has been pruned, the server responds with a 404
-   * @response `400` `(AptosError)`
-   * @response `404` `(AptosError)`
-   * @response `500` `(AptosError)`
+   * @response `200` `(MoveModuleBytecode)[]`
+   * @response `400` `AptosError`
+   * @response `404` `AptosError`
+   * @response `500` `AptosError`
    */
   getAccountModules = (
     { address, ...query }: GetAccountModulesParams,
     params: RequestParams = {}
   ) =>
-    this.http.request<MoveModule[], AptosError>({
+    this.http.request<MoveModuleBytecode[], AptosError>({
       path: `/accounts/${address}/modules`,
-      method: "GET",
-      query: query,
-      format: "json",
-      ...params,
-    });
-  /**
-   * @description This API renders a Move module identified by the module id. A module id consists of the module owner `address` and the `module_name`. The module is rendered at a ledger version (AKA transaction version) specified as a query param, otherwise the latest version is used.
-   *
-   * @tags accounts, state
-   * @name GetAccountModule
-   * @summary Get module by module id.
-   * @request GET:/accounts/{address}/module/{module_name}
-   * @response `200` `MoveModule` Returns a move module.
-   * @response `400` `(AptosError)`
-   * @response `404` `(AptosError)`
-   * @response `500` `(AptosError)`
-   */
-  getAccountModule = (
-    { address, moduleName, ...query }: GetAccountModuleParams,
-    params: RequestParams = {}
-  ) =>
-    this.http.request<MoveModule, AptosError>({
-      path: `/accounts/${address}/module/${moduleName}`,
-      method: "GET",
-      query: query,
-      format: "json",
-      ...params,
-    });
-  /**
-   * No description
-   *
-   * @tags transactions
-   * @name GetAccountTransactions
-   * @summary Get account transactions
-   * @request GET:/accounts/{address}/transactions
-   * @response `200` `(OnChainTransaction)[]` Returns on-chain transactions, paginated.
-   * @response `400` `(AptosError)`
-   * @response `500` `(AptosError)`
-   */
-  getAccountTransactions = (
-    { address, ...query }: GetAccountTransactionsParams,
-    params: RequestParams = {}
-  ) =>
-    this.http.request<OnChainTransaction[], AptosError>({
-      path: `/accounts/${address}/transactions`,
       method: "GET",
       query: query,
       format: "json",
@@ -169,26 +105,90 @@ export class Accounts<SecurityDataType = unknown> {
   /**
    * @description This API extracts event key from the account resource identified by the `event_handle_struct` and `field_name`, then returns events identified by the event key.
    *
-   * @tags events
+   * @tags Events
    * @name GetEventsByEventHandle
    * @summary Get events by event handle
-   * @request GET:/accounts/{address}/events/{event_handle_struct}/{field_name}
-   * @response `200` `(Event)[]` Returns events
-   * @response `400` `(AptosError)`
-   * @response `404` `(AptosError)`
-   * @response `500` `(AptosError)`
+   * @request GET:/accounts/{address}/events/{event_handle}/{field_name}
+   * @response `200` `(VersionedEvent)[]`
+   * @response `400` `AptosError`
+   * @response `404` `AptosError`
+   * @response `500` `AptosError`
    */
   getEventsByEventHandle = (
-    {
-      address,
-      eventHandleStruct,
-      fieldName,
-      ...query
-    }: GetEventsByEventHandleParams,
+    { address, eventHandle, fieldName, ...query }: GetEventsByEventHandleParams,
     params: RequestParams = {}
   ) =>
-    this.http.request<Event[], AptosError>({
-      path: `/accounts/${address}/events/${eventHandleStruct}/${fieldName}`,
+    this.http.request<VersionedEvent[], AptosError>({
+      path: `/accounts/${address}/events/${eventHandle}/${fieldName}`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+  /**
+   * @description This endpoint returns the resource of a specific type residing at a given account at a specified ledger version (AKA transaction version). If the ledger version is not specified in the request, the latest ledger version is used. The Aptos nodes prune account state history, via a configurable time window (link). If the requested data has been pruned, the server responds with a 404.
+   *
+   * @tags Accounts
+   * @name GetAccountResource
+   * @summary Get specific account resource
+   * @request GET:/accounts/{address}/resource/{resource_type}
+   * @response `200` `MoveResource`
+   * @response `400` `AptosError`
+   * @response `404` `AptosError`
+   * @response `500` `AptosError`
+   */
+  getAccountResource = (
+    { address, resourceType, ...query }: GetAccountResourceParams,
+    params: RequestParams = {}
+  ) =>
+    this.http.request<MoveResource, AptosError>({
+      path: `/accounts/${address}/resource/${resourceType}`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+  /**
+   * @description This endpoint returns the module with a specific name residing at a given account at a specified ledger version (AKA transaction version). If the ledger version is not specified in the request, the latest ledger version is used. The Aptos nodes prune account state history, via a configurable time window (link). If the requested data has been pruned, the server responds with a 404.
+   *
+   * @tags Accounts
+   * @name GetAccountModule
+   * @summary Get specific account module
+   * @request GET:/accounts/{address}/module/{module_name}
+   * @response `200` `MoveModuleBytecode`
+   * @response `400` `AptosError`
+   * @response `404` `AptosError`
+   * @response `500` `AptosError`
+   */
+  getAccountModule = (
+    { address, moduleName, ...query }: GetAccountModuleParams,
+    params: RequestParams = {}
+  ) =>
+    this.http.request<MoveModuleBytecode, AptosError>({
+      path: `/accounts/${address}/module/${moduleName}`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+  /**
+   * @description todo
+   *
+   * @tags Transactions
+   * @name GetAccountTransactions
+   * @summary Get account transactions
+   * @request GET:/accounts/{address}/transactions
+   * @response `200` `(Transaction)[]`
+   * @response `400` `AptosError`
+   * @response `404` `AptosError`
+   * @response `500` `AptosError`
+   */
+  getAccountTransactions = (
+    { address, ...query }: GetAccountTransactionsParams,
+    params: RequestParams = {}
+  ) =>
+    this.http.request<Transaction[], AptosError>({
+      path: `/accounts/${address}/transactions`,
       method: "GET",
       query: query,
       format: "json",

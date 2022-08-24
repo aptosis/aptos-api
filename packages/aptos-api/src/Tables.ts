@@ -9,7 +9,12 @@
  * ---------------------------------------------------------------
  */
 
-import { AptosError, TableItemRequest } from "@aptosis/aptos-data-contracts";
+import {
+  AptosError,
+  GetTableItemParams,
+  MoveValue,
+  TableItemRequest,
+} from "@aptosis/aptos-data-contracts";
 import { ContentType, HttpClient, RequestParams } from "./http-client.js";
 
 export class Tables<SecurityDataType = unknown> {
@@ -20,27 +25,26 @@ export class Tables<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Gets a table item for a table identified by the handle and the key for the item. Key and value types need to be passed in to help with key serialization and value deserialization.
+   * @description Get a table item from the table identified by {table_handle} in the path and the "key" (TableItemRequest) provided in the request body. This is a POST endpoint because the "key" for requesting a specific table item (TableItemRequest) could be quite complex, as each of its fields could themselves be composed of other structs. This makes it impractical to express using query params, meaning GET isn't an option.
    *
-   * @tags state, table
+   * @tags Tables
    * @name GetTableItem
-   * @summary Get table item by handle and key.
+   * @summary Get table item
    * @request POST:/tables/{table_handle}/item
-   * @response `200` `object` Returns the table item value rendered in JSON.
-   * @response `400` `(AptosError)`
-   * @response `404` `(AptosError)`
-   * @response `413` `(AptosError)`
-   * @response `415` `(AptosError)`
-   * @response `500` `(AptosError)`
+   * @response `200` `MoveValue`
+   * @response `400` `AptosError`
+   * @response `404` `AptosError`
+   * @response `500` `AptosError`
    */
   getTableItem = (
-    tableHandle: string,
+    { tableHandle, ...query }: GetTableItemParams,
     data: TableItemRequest,
     params: RequestParams = {}
   ) =>
-    this.http.request<object, AptosError>({
+    this.http.request<MoveValue, AptosError>({
       path: `/tables/${tableHandle}/item`,
       method: "POST",
+      query: query,
       body: data,
       type: ContentType.Json,
       format: "json",
